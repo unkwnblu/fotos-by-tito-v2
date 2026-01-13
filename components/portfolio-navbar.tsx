@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Moon, Sun, Menu, X, Instagram } from "lucide-react";
-import { useTheme } from "next-themes";
+import { Menu, X, Instagram } from "lucide-react";
 import logo from "../public/logo.svg";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -12,7 +11,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export function PortfolioNavbar() {
   const pathname = usePathname();
-  const { setTheme, theme } = useTheme();
+
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -43,7 +42,7 @@ export function PortfolioNavbar() {
     <>
       <nav
         className={cn(
-          "sticky top-0 z-50 flex items-center shadow-xl justify-between md:justify-center dark:border-gray-800 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out",
+          "sticky top-0 z-50 flex items-center shadow-xl justify-between md:justify-center bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out",
           scrolled ? "py-2" : "p-4 md:p-6"
         )}
       >
@@ -88,7 +87,7 @@ export function PortfolioNavbar() {
               width={32}
               height={32}
               className={cn(
-                "dark:invert h-auto transition-all duration-300 ease-in-out",
+                "h-auto transition-all duration-300 ease-in-out",
                 scrolled ? "w-24 md:w-28" : "w-32 md:w-40"
               )}
               priority
@@ -113,17 +112,6 @@ export function PortfolioNavbar() {
         </div>
 
         {/* Far Right: Theme Toggle (Desktop Only) */}
-        <div className="hidden md:block absolute right-8 md:right-12 lg:right-24 top-1/2 -translate-y-1/2">
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="relative rounded-full border border-border/40 p-2 hover:bg-accent hover:text-accent-foreground focus:outline-none transition-colors"
-            aria-label="Toggle theme"
-          >
-            <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            <span className="sr-only">Toggle theme</span>
-          </button>
-        </div>
 
         {/* Mobile: Hamburger Button (Right) */}
         <button
@@ -162,15 +150,6 @@ export function PortfolioNavbar() {
                 </Link>
               ))}
               <div className="flex items-center gap-4 pt-4">
-                <button
-                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                  className="relative rounded-full border border-border/40 p-2 hover:bg-accent hover:text-accent-foreground focus:outline-none transition-colors"
-                  aria-label="Toggle theme"
-                >
-                  <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                  <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                  <span className="sr-only">Toggle theme</span>
-                </button>
                 <Link
                   href="https://instagram.com"
                   target="_blank"

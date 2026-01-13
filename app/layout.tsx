@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Nunito, Roboto_Flex } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+
 import { ScrollToTop } from "@/components/scroll-to-top";
 
 import { LayoutWrapper } from "@/components/layout-wrapper";
@@ -40,16 +40,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${robotoFlex.variable} ${nunito.variable} antialiased`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <LayoutWrapper>
-            {children}
-            <ScrollToTop />
-          </LayoutWrapper>
-        </ThemeProvider>
+        <LayoutWrapper>
+          {children}
+          <ScrollToTop />
+        </LayoutWrapper>
       </body>
     </html>
   );

@@ -31,7 +31,7 @@ export function PortfolioEndCap() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-3xl md:text-5xl font-serif font-medium tracking-wide mb-10 text-emerald-900 dark:text-emerald-500"
+          className="text-3xl md:text-5xl font-serif font-medium tracking-wide mb-10 text-emerald-900"
         >
           Ready to create something beautiful?
         </motion.h2>

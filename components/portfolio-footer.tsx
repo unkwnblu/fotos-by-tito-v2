@@ -18,13 +18,13 @@ export function PortfolioFooter() {
     <footer className="w-full bg-background pt-24 pb-8 overflow-hidden">
       {/* 1. Large Title */}
       <div className="container mx-auto px-4 mb-16">
-        <h1 className="text-right text-5xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-emerald-900 dark:text-emerald-500">
+        <h1 className="text-right text-5xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-emerald-900">
           FOTOSBYTITO
         </h1>
       </div>
 
       {/* 2. Scrolling Marquee */}
-      <div className="relative w-full bg-[#FFF5E6] dark:bg-emerald-950/30 py-4 mb-24 overflow-hidden -rotate-1 scale-105">
+      <div className="relative w-full bg-[#FFF5E6] py-4 mb-24 overflow-hidden -rotate-1 scale-105">
         <div className="flex whitespace-nowrap">
           <motion.div
             className="flex items-center gap-8"
@@ -37,8 +37,8 @@ export function PortfolioFooter() {
           >
             {[...services, ...services, ...services].map((service, i) => (
               <div key={i} className="flex items-center gap-8">
-                <Star className="h-6 w-6 text-emerald-900 dark:text-emerald-500 fill-emerald-900 dark:fill-emerald-500" />
-                <span className="text-sm md:text-base font-medium tracking-widest text-emerald-900 dark:text-emerald-500">
+                <Star className="h-6 w-6 text-emerald-900 fill-emerald-900" />
+                <span className="text-sm md:text-base font-medium tracking-widest text-emerald-900">
                   {service}
                 </span>
               </div>
@@ -56,8 +56,8 @@ export function PortfolioFooter() {
           >
             {[...services, ...services, ...services].map((service, i) => (
               <div key={`dup-${i}`} className="flex items-center gap-8">
-                <Star className="h-6 w-6 text-emerald-900 dark:text-emerald-500 fill-emerald-900 dark:fill-emerald-500" />
-                <span className="text-sm md:text-base font-medium tracking-widest text-emerald-900 dark:text-emerald-500">
+                <Star className="h-6 w-6 text-emerald-900 fill-emerald-900" />
+                <span className="text-sm md:text-base font-medium tracking-widest text-emerald-900">
                   {service}
                 </span>
               </div>

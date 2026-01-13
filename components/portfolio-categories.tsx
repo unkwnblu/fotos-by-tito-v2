@@ -36,7 +36,7 @@ function CategorySection({ data }: { data: CategoryData }) {
           href={`/portfolio/${data.id}`}
           className="hover:opacity-80 transition-opacity"
         >
-          <h2 className="text-xl md:text-2xl font-medium tracking-wide text-emerald-900 dark:text-emerald-500 uppercase">
+          <h2 className="text-xl md:text-2xl font-medium tracking-wide text-emerald-900 uppercase">
             {data.title}
           </h2>
         </Link>

@@ -63,17 +63,17 @@ export function Faq() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="mb-2 border-gray-200 dark:border-gray-800 py-8"
+        className="mb-2 border-gray-200 py-8"
       >
         <p className="text-sm font-medium tracking-widest text-muted-foreground uppercase mb-2">
           FAQ'S
         </p>
-        <h2 className="text-3xl md:text-5xl font-serif tracking-tight text-[#2d5d4b] dark:text-[#4d8d7b] uppercase">
+        <h2 className="text-3xl md:text-5xl font-serif tracking-tight text-[#2d5d4b] uppercase">
           Frequently Asked Questions
         </h2>
       </motion.div>
 
-      <div className="grid md:grid-cols-2 border-t border-gray-200 dark:border-gray-800">
+      <div className="grid md:grid-cols-2 border-t border-gray-200">
         {/* Left Column (Indices 0, 1, 2, 3) */}
         <div className="flex flex-col">
           {faqs.slice(0, 4).map((faq, idx) => (
@@ -88,7 +88,7 @@ export function Faq() {
                 faq={faq}
                 isOpen={openIndex === idx}
                 onClick={() => toggleFaq(idx)}
-                className="md:border-r border-gray-200 dark:border-gray-800"
+                className="md:border-r border-gray-200"
               />
             </motion.div>
           ))}
@@ -129,12 +129,7 @@ function FaqItem({
   className?: string;
 }) {
   return (
-    <div
-      className={cn(
-        "border-b border-gray-200 dark:border-gray-800 px-6",
-        className
-      )}
-    >
+    <div className={cn("border-b border-gray-200 px-6", className)}>
       <button
         onClick={onClick}
         className="flex w-full items-center justify-between py-8 text-left focus:outline-none group"
@@ -142,7 +137,7 @@ function FaqItem({
         <span className="text-sm md:text-base font-medium uppercase tracking-wide pr-6 group-hover:text-primary transition-colors">
           {faq.question}
         </span>
-        <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-gray-300 dark:border-gray-700 transition-colors group-hover:border-primary">
+        <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-gray-300 transition-colors group-hover:border-primary">
           <ChevronDown
             className={cn(
               "h-4 w-4 transition-transform duration-300",

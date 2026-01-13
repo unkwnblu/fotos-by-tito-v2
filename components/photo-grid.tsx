@@ -109,7 +109,7 @@ export function PhotoGrid({ photos = defaultPhotos }: PhotoGridProps) {
               )}
             >
               <div className="w-16 h-px bg-primary/20 mb-6" />
-              <h3 className="text-xl md:text-2xl font-serif text-emerald-900 dark:text-emerald-500 mb-6 font-medium">
+              <h3 className="text-xl md:text-2xl font-serif text-emerald-900 mb-6 font-medium">
                 {photo.ctaContent.title}
               </h3>
               <a
