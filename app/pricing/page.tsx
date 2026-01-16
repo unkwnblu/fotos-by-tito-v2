@@ -1,98 +1,206 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
-import { ScrollReveal } from "@/components/scroll-reveal";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const offerings = [
   {
-    title: "FAMILY & MATERNITY",
-    slug: "family-maternity",
+    id: "family",
+    title: "Family",
+    subtitle: "Cherished Moments",
+    price: "Starting at $450",
     description:
-      "Our portrait photography service is all about showcasing your unique personality. Whether you need a professional headshot, a family portrait, or a personal photoshoot, we create images that reflect your true self. We work closely with you to bring out your best angles and expressions, ensuring every portrait tells your story.",
+      "Capture the genuine connection and chaotic joy of your family. Perfect for annual updates or celebrating milestones.",
+    features: [
+      "1 Hour Session",
+      "30 Edited Images",
+      "Online Gallery",
+      "Print Rights",
+    ],
     image:
       "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop",
+    link: "/pricing/family-maternity",
   },
   {
-    title: "NEWBORN",
-    slug: "newborn",
+    id: "newborn",
+    title: "Newborn",
+    subtitle: "Tiny Beginnings",
+    price: "Starting at $600",
     description:
-      "Capturing the magic of your special day with a blend of candid moments and artistic composition. From the nervous anticipation to the joyous celebration, we document every emotion to create a timeless visual story of your love.",
+      "A slow-paced, gentle session to document the fresh details of your newest addition in the comfort of your home.",
+    features: [
+      "2-3 Hour Session",
+      "20 Edited Images",
+      "Lifestyle & Posed",
+      "Baby & Family Props",
+    ],
     image:
       "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop",
+    link: "/pricing/newborn",
   },
   {
-    title: "PORTRAITS & HEADSHOTS",
-    slug: "portraits-headshots",
+    id: "portraits",
+    title: "Portraits",
+    subtitle: "Boldly You",
+    price: "Starting at $350",
     description:
-      "Elevate your brand with high-quality imagery that speaks to your audience. We specialize in product photography, corporate headshots, and lifestyle visuals that define your brand identity and make a lasting impact.",
+      "Whether for branding, seniors, or just because. High-end editorial style portraits that make a statement.",
+    features: [
+      "45 Minute Session",
+      "15 Edited Images",
+      "2 Outfit Changes",
+      "Retouching Included",
+    ],
     image:
       "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop",
+    link: "/pricing/portraits-headshots",
   },
 ];
 
 export default function PricingPage() {
-  return (
-    <div className="min-h-screen bg-background pt-10 pb-20">
-      <div className="container mx-auto px-4 md:px-12 lg:px-24">
-        {/* Header */}
-        <ScrollReveal className="mb-10 text-center">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wide decoration-blue-500 decoration-4 underline-offset-8">
-            DIVERSE PHOTOGRAPHY OFFERINGS
-          </h1>
-        </ScrollReveal>
+  const [activeId, setActiveId] = useState<string | null>("newborn");
 
-        {/* Offerings List */}
-        <div className="lg:space-y-32 md:space-y-20 space-y-10">
-          {offerings.map((offering, idx) => (
-            <div
-              key={idx}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center"
-            >
-              {/* Text Content */}
-              <ScrollReveal
-                direction="right"
-                className={`order-2 ${
-                  idx % 2 === 0 ? "lg:order-1" : "lg:order-2"
-                }`}
-              >
-                <h2 className="text-2xl md:text-3xl font-semibold text-emerald-900 dark:text-emerald-500 uppercase tracking-wider mb-6">
+  return (
+    <div className="min-h-screen bg-background flex flex-col md:flex-row overflow-hidden relative">
+      {/* Mobile Header (Visible only on small screens) */}
+      <div className="md:hidden pt-24 pb-8 px-6">
+        <h1 className="text-4xl font-serif font-bold tracking-tighter text-foreground mb-2">
+          Select Session
+        </h1>
+        <p className="text-muted-foreground uppercase text-xs tracking-widest">
+          Tap to expand
+        </p>
+      </div>
+
+      {offerings.map((offering) => {
+        const isActive = activeId === offering.id;
+
+        return (
+          <motion.div
+            key={offering.id}
+            layout
+            onClick={() => setActiveId(isActive ? null : offering.id)}
+            className={cn(
+              "relative flex-1 md:h-screen min-h-[100px] md:min-h-0 flex flex-col justify-end overflow-hidden cursor-pointer group transition-all duration-700 ease-in-out border-b md:border-b-0 md:border-r border-border hover:flex-[1.5]",
+              isActive ? "flex-[5] md:flex-[2.5]" : "flex-[1]"
+            )}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            {/* Background Image */}
+            <div className="absolute inset-0 z-0 bg-zinc-200 dark:bg-zinc-900">
+              <Image
+                src={offering.image}
+                alt={offering.title}
+                fill
+                className={cn(
+                  "object-cover transition-all duration-1000 ease-out",
+                  isActive
+                    ? "scale-105 opacity-40 md:opacity-100"
+                    : "scale-100 opacity-60 grayscale md:grayscale-[0.5] group-hover:grayscale-0"
+                )}
+              />
+              <div
+                className={cn(
+                  "absolute inset-0 transition-colors duration-500",
+                  isActive
+                    ? "bg-background/80 md:bg-black/40"
+                    : "bg-black/50 group-hover:bg-transparent"
+                )}
+              />
+            </div>
+
+            {/* Vertical Title (Desktop Inactive) */}
+            {!isActive && (
+              <div className="hidden md:flex absolute inset-0 items-center justify-center z-10 pointer-events-none">
+                <h2 className="text-4xl font-serif font-bold text-white uppercase tracking-widest rotate-[-90deg] whitespace-nowrap opacity-90 drop-shadow-md">
                   {offering.title}
                 </h2>
-                <p className="text-muted-foreground leading-relaxed mb-8 text-sm md:text-base">
-                  {offering.description}
-                </p>
-                <Link
-                  href={`/pricing/${offering.slug}`}
-                  className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors border-b border-transparent hover:border-foreground pb-1"
-                >
-                  EXPLORE CATEGORY <ArrowUpRight className="h-3 w-3" />
-                </Link>
-              </ScrollReveal>
+              </div>
+            )}
 
-              {/* Image Card with Cutout */}
-              <ScrollReveal
-                direction="left"
-                className={`relative order-1 ${
-                  idx % 2 === 0 ? "lg:order-2" : "lg:order-1"
-                }`}
-              >
-                {/* Image Container with Mask */}
-                <div className="relative h-[300px] md:h-[400px] w-full overflow-hidden rounded-3xl bg-muted">
-                  <Image
-                    src={offering.image}
-                    alt={offering.title}
-                    fill
-                    className="object-cover transition-transform duration-700 hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-black/10 transition-colors hover:bg-transparent" />
-                </div>
-              </ScrollReveal>
+            {/* Content Container */}
+            <div className="relative z-20 p-8 md:p-12 lg:p-16 flex flex-col h-full justify-between">
+              {/* Header (Active Only on Desktop, Always on Mobile if active) */}
+              <AnimatePresence>
+                {(isActive ||
+                  (typeof window !== "undefined" &&
+                    window.innerWidth < 768)) && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="space-y-2"
+                  >
+                    <p
+                      className={cn(
+                        "text-xs font-bold tracking-[0.2em] uppercase md:text-white/80",
+                        isActive ? "text-primary/80" : "text-white/90"
+                      )}
+                    >
+                      {offering.subtitle}
+                    </p>
+                    <h2
+                      className={cn(
+                        "text-4xl md:text-6xl font-serif font-bold leading-none md:text-white",
+                        isActive ? "text-foreground" : "text-white"
+                      )}
+                    >
+                      {offering.title}
+                    </h2>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Expanded Details */}
+              <AnimatePresence>
+                {isActive && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="space-y-8 pt-6 md:max-w-md"
+                  >
+                    <div className="h-px w-12 bg-primary/50 md:bg-white/50" />
+
+                    <p className="text-lg md:text-xl text-muted-foreground md:text-white/90 leading-relaxed font-light">
+                      {offering.description}
+                    </p>
+
+                    <div className="space-y-3">
+                      {offering.features.map((feature, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center gap-3 text-sm md:text-base text-foreground/80 md:text-white/80"
+                        >
+                          <Check className="w-4 h-4 text-primary md:text-emerald-400" />
+                          <span>{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="pt-4 flex flex-col md:flex-row items-start md:items-center gap-6">
+                      <span className="text-3xl font-serif text-foreground md:text-white">
+                        {offering.price}
+                      </span>
+                      <Link
+                        href={offering.link}
+                        className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-foreground text-background md:bg-white md:text-black font-medium hover:scale-105 transition-transform"
+                      >
+                        Book Session <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-          ))}
-        </div>
-      </div>
+          </motion.div>
+        );
+      })}
     </div>
   );
 }

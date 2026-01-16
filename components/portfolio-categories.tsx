@@ -82,11 +82,22 @@ function CategorySection({ data }: { data: CategoryData }) {
   );
 }
 
+import { motion } from "framer-motion";
+import { fadeInUp, staggerContainer } from "@/lib/animations";
+
 export function PortfolioCategories() {
   return (
     <div className="flex flex-col gap-2 py-12">
       {categories.map((category) => (
-        <CategorySection key={category.id} data={category} />
+        <motion.div
+          key={category.id}
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, margin: "-100px" }}
+        >
+          <CategorySection data={category} />
+        </motion.div>
       ))}
     </div>
   );

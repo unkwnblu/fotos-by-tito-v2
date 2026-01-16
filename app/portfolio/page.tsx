@@ -4,6 +4,7 @@ import { PortfolioHero } from "@/components/portfolio-hero";
 import { PortfolioCategories } from "@/components/portfolio-categories";
 import { PortfolioFooter } from "@/components/portfolio-footer";
 import { motion } from "framer-motion";
+import { fadeInUp } from "@/lib/animations";
 
 export default function PortfolioPage() {
   return (
@@ -12,10 +13,10 @@ export default function PortfolioPage() {
 
       <div className="container mx-auto px-4 py-2">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, margin: "-100px" }}
         >
           <PortfolioCategories />
         </motion.div>

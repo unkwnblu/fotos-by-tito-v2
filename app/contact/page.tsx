@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Send } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { cn } from "@/lib/utils";
+import { ScrollReveal } from "@/components/scroll-reveal";
 import Img from "../../public/contact.jpg";
 
 export default function ContactPage() {
@@ -22,7 +23,10 @@ export default function ContactPage() {
       <div className="container mx-auto px-4 md:px-12 lg:px-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 mb-32">
           {/* LEFT: Abstract Image */}
-          <div className="relative w-full aspect-[4/5] lg:aspect-auto lg:h-full lg:min-h-[800px] overflow-hidden rounded-sm  p-2">
+          <ScrollReveal
+            direction="right"
+            className="relative w-full aspect-[4/5] lg:aspect-auto lg:h-full lg:min-h-[800px] overflow-hidden rounded-sm  p-2"
+          >
             <div className="relative w-full h-full overflow-hidden">
               <Image
                 src={Img}
@@ -31,10 +35,13 @@ export default function ContactPage() {
                 className="object-cover rounded-xl"
               />
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* RIGHT: Contact Form */}
-          <div className="flex flex-col justify-center py-8">
+          <ScrollReveal
+            direction="left"
+            className="flex flex-col justify-center py-8"
+          >
             <form className="space-y-12">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div className="space-y-4">
@@ -144,7 +151,7 @@ export default function ContactPage() {
                 </button>
               </div>
             </form>
-          </div>
+          </ScrollReveal>
         </div>
 
         {/* BOTTOM: Instagram Section */}
