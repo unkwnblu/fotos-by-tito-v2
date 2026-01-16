@@ -1,15 +1,18 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
 import { useState } from "react";
 import { pricingData } from "@/lib/pricing-data";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles } from "lucide-react";
+import { Sparkles, ArrowLeft, Check } from "lucide-react";
 import { BookingModal } from "@/components/booking-modal";
+import { cn } from "@/lib/utils";
+import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 export default function PricingCategoryPage() {
   const params = useParams();
+  const router = useRouter();
   const categoryId = params.category as string;
   const data = pricingData[categoryId];
 
@@ -24,14 +27,14 @@ export default function PricingCategoryPage() {
   if (!data) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
-        <div className="text-center">
+        <div className="text-center space-y-4">
           <h1 className="text-2xl font-bold">Category not found</h1>
-          <Link
-            href="/pricing"
-            className="mt-4 inline-block text-primary hover:underline"
+          <button
+            onClick={() => router.back()}
+            className="text-primary hover:underline"
           >
-            Back to Pricing
-          </Link>
+            Go Back
+          </button>
         </div>
       </div>
     );
@@ -40,44 +43,65 @@ export default function PricingCategoryPage() {
   const currentPackages = data.packages[activeTab] || [];
 
   return (
-    <div className="min-h-screen bg-background pt-10 pb-20">
-      <div className="container mx-auto px-4 md:px-12 lg:px-24">
-        {/* Breadcrumb */}
-        <div className="mb-12 text-xs md:text-sm font-bold tracking-widest text-muted-foreground uppercase">
-          <Link
-            href="/pricing"
-            className="hover:text-foreground transition-colors"
+    <div className="min-h-screen bg-background flex flex-col md:flex-row">
+      {/* LEFT COLUMN: Sticky Image & Title */}
+      <div className="w-full md:w-1/2 h-[25vh] md:h-screen sticky top-0 relative z-0 overflow-hidden bg-muted">
+        <Image
+          src={data.image}
+          alt={data.title}
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-black/30 md:bg-black/20" />
+
+        <div className="absolute inset-0 p-8 md:p-16 flex flex-col justify-between">
+          <button
+            onClick={() => router.push("/pricing")}
+            className="text-white/80 hover:text-white flex items-center gap-2 group w-fit"
           >
-            PRICING
-          </Link>{" "}
-          &gt; <span className="text-foreground">{data.title}</span>
-        </div>
+            <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+            <span className="text-xs font-bold tracking-[0.2em] uppercase">
+              Back to Pricing
+            </span>
+          </button>
 
-        {/* Description */}
-        <div className="mb-20 max-w-4xl">
-          <p className="text-base md:text-lg leading-relaxed text-muted-foreground">
-            {data.description}
-          </p>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-white leading-none mb-4">
+              {data.title}
+            </h1>
+            <p className="text-white/90 text-sm md:text-lg max-w-md font-light leading-relaxed">
+              {data.description}
+            </p>
+          </motion.div>
         </div>
+      </div>
 
-        {/* Tabs - Only show if more than 1 tab */}
+      {/* RIGHT COLUMN: Scrollable Content */}
+      <div className="w-full md:w-1/2 min-h-screen bg-background relative z-10 p-6 md:p-16 lg:p-24 flex flex-col">
+        {/* Tabs */}
         {data.tabs.length > 1 && (
-          <div className="mb-16 flex flex-wrap gap-8 md:gap-16 border-b border-border/50 pb-4">
+          <div className="mb-16 flex flex-wrap gap-8 pb-4 sticky top-4 bg-background/95 backdrop-blur-sm z-10 pt-4">
             {data.tabs.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`relative pb-4 text-sm md:text-base font-bold tracking-widest uppercase transition-colors ${
+                className={cn(
+                  "relative pb-2 text-sm font-bold tracking-widest uppercase transition-colors",
                   activeTab === tab
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground/70"
-                }`}
+                )}
               >
                 {tab}
                 {activeTab === tab && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-foreground"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2d5d4b]"
                   />
                 )}
               </button>
@@ -85,70 +109,70 @@ export default function PricingCategoryPage() {
           </div>
         )}
 
-        {/* Separator if no tabs */}
-        {data.tabs.length <= 1 && (
-          <div className="mb-16 border-b border-border/50" />
-        )}
-
-        {/* Pricing List */}
-        <div className="space-y-12">
+        {/* Packages List */}
+        <motion.div
+          className="space-y-16 md:space-y-24 flex-1"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, margin: "-50px" }}
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.4, staggerChildren: 0.1 },
+                },
+                exit: { opacity: 0, y: -20 },
+              }}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
               className="space-y-12"
             >
               {currentPackages.map((pkg, idx) => (
-                <div
+                <motion.div
                   key={pkg.name}
-                  className="group border-b border-border/50 pb-12 last:border-0"
+                  variants={fadeInUp}
+                  className="group flex flex-col gap-6"
                 >
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
-                    {/* Left Column: Price & Title */}
-                    <div className="md:col-span-4 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-medium text-muted-foreground mb-2">
-                          {pkg.name}
-                        </h3>
-                        <div className="text-5xl md:text-6xl font-serif text-muted-foreground/40 font-light mb-6">
-                          {pkg.price}
-                        </div>
-                      </div>
-                      <div>
-                        <button
-                          onClick={() =>
-                            setSelectedPackage({
-                              name: pkg.name,
-                              price: pkg.price,
-                              categoryTitle: data.title,
-                            })
-                          }
-                          className="inline-block text-xs font-bold tracking-widest uppercase border-b border-foreground/30 hover:border-foreground pb-1 transition-colors text-left"
-                        >
-                          BOOK A CALL
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Right Column: Features */}
-                    <div className="md:col-span-8 space-y-4">
-                      {pkg.features.map((feature, fIdx) => (
-                        <div
-                          key={fIdx}
-                          className="flex items-center gap-4 rounded-full border border-border p-4 px-6 transition-colors hover:border-foreground/50 hover:bg-muted/30"
-                        >
-                          <Sparkles className="h-4 w-4 flex-shrink-0 text-foreground/60" />
-                          <span className="text-xs md:text-sm font-medium tracking-wide text-muted-foreground uppercase">
-                            {feature}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-baseline gap-4 border-b border-border py-4">
+                    <h3 className="text-2xl md:text-3xl font-serif text-foreground">
+                      {pkg.name}
+                    </h3>
+                    <span className="text-xl md:text-2xl font-light text-foreground">
+                      {pkg.price}
+                    </span>
                   </div>
-                </div>
+
+                  <div className="space-y-4">
+                    {pkg.features.map((feature, i) => (
+                      <div key={i} className="flex items-start gap-3">
+                        <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0" />
+                        <span className="text-sm md:text-base text-muted-foreground leading-relaxed uppercase tracking-wide">
+                          {feature}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() =>
+                      setSelectedPackage({
+                        name: pkg.name,
+                        price: pkg.price,
+                        categoryTitle: data.title,
+                      })
+                    }
+                    className="mt-4 w-full md:w-fit px-8 py-4 bg-[#2d5d4b] text-background text-xs font-bold tracking-[0.2em] uppercase hover:bg-foreground/90 transition-colors"
+                  >
+                    Request Booking
+                  </button>
+                </motion.div>
               ))}
             </motion.div>
           </AnimatePresence>
@@ -158,6 +182,34 @@ export default function PricingCategoryPage() {
               No packages available for this category yet.
             </div>
           )}
+        </motion.div>
+
+        {/* Footer info - What's Included */}
+        <div className="mt-24 pt-12 border-t border-border/50">
+          <h3 className="text-xl font-serif font-bold mb-8 text-foreground uppercase tracking-wider">
+            What’s Included in Every Session
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+            {[
+              "Professional guidance throughout your session",
+              "Carefully edited, high-resolution images",
+              "Private online gallery for viewing & downloads",
+              "Option to purchase additional images at €10 per image",
+              "Simple styling guidance before your shoot",
+              "No VAT charged under the KOR scheme",
+              "All sessions require a booking retainer of €50",
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="flex items-start gap-3 text-muted-foreground"
+              >
+                <span className="mt-2 w-1 h-1 rounded-full bg-foreground shrink-0" />
+                <span className="text-sm font-light leading-relaxed">
+                  {item}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

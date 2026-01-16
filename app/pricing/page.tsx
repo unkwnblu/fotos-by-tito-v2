@@ -10,16 +10,16 @@ import { cn } from "@/lib/utils";
 const offerings = [
   {
     id: "family",
-    title: "Family",
+    title: "Family & Milestones",
     subtitle: "Cherished Moments",
-    price: "Starting at $450",
+    price: "Starting at €165",
     description:
-      "Capture the genuine connection and chaotic joy of your family. Perfect for annual updates or celebrating milestones.",
+      "From growing families to joyful celebrations, these sessions are designed to capture connection, personality, and the moments you’ll want to remember years from now.",
     features: [
-      "1 Hour Session",
-      "30 Edited Images",
-      "Online Gallery",
-      "Print Rights",
+      "Relaxed & Fun",
+      "No Stiff Posing",
+      "Families, Birthdays, Maternity",
+      "Professional Editing",
     ],
     image:
       "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop",
@@ -27,16 +27,16 @@ const offerings = [
   },
   {
     id: "newborn",
-    title: "Newborn",
+    title: "Newborns",
     subtitle: "Tiny Beginnings",
-    price: "Starting at $600",
+    price: "Starting at €250",
     description:
-      "A slow-paced, gentle session to document the fresh details of your newest addition in the comfort of your home.",
+      "Gentle, unhurried sessions focused on your baby’s earliest days — with comfort, safety, and simplicity at the heart of every shoot.",
     features: [
-      "2-3 Hour Session",
-      "20 Edited Images",
-      "Lifestyle & Posed",
-      "Baby & Family Props",
+      "Baby-led Pace",
+      "Comfort & Safety First",
+      "In-home Sessions",
+      "Timeless Edits",
     ],
     image:
       "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop",
@@ -44,16 +44,16 @@ const offerings = [
   },
   {
     id: "portraits",
-    title: "Portraits",
+    title: "Portraits & Headshots",
     subtitle: "Boldly You",
-    price: "Starting at $350",
+    price: "Starting at €100",
     description:
-      "Whether for branding, seniors, or just because. High-end editorial style portraits that make a statement.",
+      "Clean, professional portraits that reflect who you are — whether for work, personal branding, or simply celebrating yourself.",
     features: [
-      "45 Minute Session",
-      "15 Edited Images",
-      "2 Outfit Changes",
-      "Retouching Included",
+      "Professional Guidance",
+      "Personal Branding",
+      "LinkedIn & Websites",
+      "Confidence Boosting",
     ],
     image:
       "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop",
@@ -189,7 +189,7 @@ export default function PricingPage() {
                       </span>
                       <Link
                         href={offering.link}
-                        className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-foreground text-background md:bg-white md:text-black font-medium hover:scale-105 transition-transform"
+                        className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-[#2d5d4b] text-background md:bg-[#2d5d4b] md:text-white font-medium hover:scale-105 transition-transform"
                       >
                         Book Session <ArrowRight className="w-4 h-4" />
                       </Link>

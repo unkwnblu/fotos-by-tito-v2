@@ -7,113 +7,84 @@ export interface PricingPackage {
 export interface PricingCategory {
   title: string;
   description: string;
+  image: string;
   tabs: string[];
   packages: Record<string, PricingPackage[]>;
 }
 
 export const pricingData: Record<string, PricingCategory> = {
   "family-maternity": {
-    title: "FAMILY & MATERNITY",
+    title: "FAMILY & MILESTONES",
+    image:
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop",
     description:
-      "Aenean sapien molestie nec dui congue. In lectus a vulputate urna. Proin viverra facilisis interdum ipsum tincidunt nec. Fermentum aenean lacus imperdiet maecenas interdum commodo quam quis. Donec mauris mauris eu vulputate mi nullam enim. Leo sed vulputate viverra dictum maecenas.",
-    tabs: ["FAMILY", "MATERNITY", "BIRTHDAY", "LIFESTYLE"],
+      "For the moments that mark your story.\n\nThese sessions are relaxed, fun, and guided — perfect for families, birthdays, maternity, and all the in-between moments worth remembering.\n\nNo stiff posing. Just real interaction and gentle direction.",
+    tabs: ["SESSIONS"],
     packages: {
-      FAMILY: [
+      SESSIONS: [
         {
-          name: "Individual Session",
-          price: "$250",
+          name: "🌿 Mini Session",
+          price: "€165",
           features: [
-            "IDEAL FOR CAPTURING YOUR UNIQUE PERSONALITY AND STYLE.",
-            "INCLUDES A 2-HOUR PHOTOSHOOT AND 20 PROFESSIONALLY EDITED IMAGES.",
-            "ADDITIONAL IMAGES CAN BE PURCHASED AT $10 EACH.",
+            "45 minutes focused session",
+            "Perfect for small families, birthdays, maternity",
+            "12 professionally edited images",
           ],
         },
         {
-          name: "Family Session",
-          price: "$400",
+          name: "⭐ Standard Session",
+          price: "€275",
           features: [
-            "PERFECT FOR CREATING LASTING MEMORIES WITH YOUR LOVED ONES.",
-            "INCLUDES A 3-HOUR PHOTOSHOOT AND 30 PROFESSIONALLY EDITED IMAGES.",
-            "ADDITIONAL IMAGES CAN BE PURCHASED AT $10 EACH.",
+            "75 minutes relaxed session",
+            "Full family stories, more variety, more breathing room",
+            "30 professionally edited images",
           ],
         },
         {
-          name: "Couple Session",
-          price: "$300",
+          name: "✨ Premium Session",
+          price: "€375",
           features: [
-            "CELEBRATE YOUR LOVE STORY WITH AN INTIMATE PHOTOSHOOT.",
-            "INCLUDES A 2.5-HOUR PHOTOSHOOT AND 25 PROFESSIONALLY EDITED IMAGES.",
-            "ADDITIONAL IMAGES CAN BE PURCHASED AT $10 EACH.",
-          ],
-        },
-      ],
-      MATERNITY: [
-        {
-          name: "Maternity Standard",
-          price: "$350",
-          features: [
-            "CAPTURE THE GLOW OF MOTHERHOOD.",
-            "INCLUDES A 2-HOUR PHOTOSHOOT AND 20 IMAGES.",
-            "WARDROBE CONSULTATION INCLUDED.",
-          ],
-        },
-      ],
-      BIRTHDAY: [
-        {
-          name: "Birthday Bash",
-          price: "$300",
-          features: [
-            "FUN AND FESTIVE BIRTHDAY SHOOT.",
-            "INCLUDES CAKE SMASH OR STANDARD PORTRAITS.",
-            "20 EDITED HIGH-RES IMAGES.",
-          ],
-        },
-      ],
-      LIFESTYLE: [
-        {
-          name: "Lifestyle Home",
-          price: "$450",
-          features: [
-            "RELAXED IN-HOME SESSION.",
-            "CAPTURE REAL MOMENTS IN YOUR SPACE.",
-            "40 EDITED IMAGES INCLUDED.",
+            "120 minutes unhurried session",
+            "Captures the full story with time for play & connection",
+            "All edited images (approx. 40–60) + priority delivery",
           ],
         },
       ],
     },
   },
   newborn: {
-    title: "NEW BORN",
+    title: "NEWBORNS",
+    image:
+      "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop",
     description:
-      "Capturing the delicate early days of life with softness and care.",
+      "Tiny details. Big love.\n\nNewborn sessions are calm, baby-led, and never rushed. We follow your baby’s pace, allowing time for feeding, soothing, and cuddles.\n\nSafety and comfort are always the priority.",
     tabs: ["SESSIONS"],
     packages: {
       SESSIONS: [
         {
-          name: "Individual Session",
-          price: "$250",
+          name: "🍼 Newborn Classic",
+          price: "€250",
           features: [
-            "IDEAL FOR CAPTURING YOUR UNIQUE PERSONALITY AND STYLE.",
-            "INCLUDES A 2-HOUR PHOTOSHOOT AND 20 PROFESSIONALLY EDITED IMAGES.",
-            "ADDITIONAL IMAGES CAN BE PURCHASED AT $10 EACH.",
+            "Up to 2-hour baby-led session",
+            "Best within the first 14 days",
+            "20 carefully edited images",
           ],
         },
         {
-          name: "Family Session",
-          price: "$400",
+          name: "⭐ Newborn Complete",
+          price: "€345",
           features: [
-            "PERFECT FOR CREATING LASTING MEMORIES WITH YOUR LOVED ONES.",
-            "INCLUDES A 3-HOUR PHOTOSHOOT AND 30 PROFESSIONALLY EDITED IMAGES.",
-            "ADDITIONAL IMAGES CAN BE PURCHASED AT $10 EACH.",
+            "Up to 3-hour relaxed session",
+            "More time for feeding, soothing & cuddles",
+            "35 professionally edited images",
           ],
         },
         {
-          name: "Couple Session",
-          price: "$300",
+          name: "✨ Newborn Luxe",
+          price: "€450",
           features: [
-            "CELEBRATE YOUR LOVE STORY WITH AN INTIMATE PHOTOSHOOT.",
-            "INCLUDES A 2.5-HOUR PHOTOSHOOT AND 25 PROFESSIONALLY EDITED IMAGES.",
-            "ADDITIONAL IMAGES CAN BE PURCHASED AT $10 EACH.",
+            "Up to 3-hour unhurried session",
+            "All edited images (approx. 40–60) + priority delivery",
           ],
         },
       ],
@@ -121,36 +92,38 @@ export const pricingData: Record<string, PricingCategory> = {
   },
   "portraits-headshots": {
     title: "PORTRAITS & HEADSHOTS",
+    image:
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop",
     description:
-      "Professional headshots and creative portraits to elevate your personal brand.",
+      "Images that speak before you do.\n\nWhether for professional use or personal milestones, these sessions are designed to help you look confident, approachable, and authentically you.\n\nPerfect for LinkedIn, websites, and personal branding.",
     tabs: ["SESSIONS"],
     packages: {
       SESSIONS: [
         {
-          name: "Individual Session",
-          price: "$250",
+          name: "🔹 Essential Portrait",
+          price: "€100",
           features: [
-            "IDEAL FOR CAPTURING YOUR UNIQUE PERSONALITY AND STYLE.",
-            "INCLUDES A 2-HOUR PHOTOSHOOT AND 20 PROFESSIONALLY EDITED IMAGES.",
-            "ADDITIONAL IMAGES CAN BE PURCHASED AT $10 EACH.",
+            "45-minute session",
+            "1 outfit",
+            "7 professionally edited images",
           ],
         },
         {
-          name: "Family Session",
-          price: "$400",
+          name: "⭐ Signature Portrait",
+          price: "€150",
           features: [
-            "PERFECT FOR CREATING LASTING MEMORIES WITH YOUR LOVED ONES.",
-            "INCLUDES A 3-HOUR PHOTOSHOOT AND 30 PROFESSIONALLY EDITED IMAGES.",
-            "ADDITIONAL IMAGES CAN BE PURCHASED AT $10 EACH.",
+            "60-minute session",
+            "Up to 2 outfits",
+            "12 professionally edited images",
           ],
         },
         {
-          name: "Couple Session",
-          price: "$300",
+          name: "✨ Brand Story Portrait",
+          price: "€240",
           features: [
-            "CELEBRATE YOUR LOVE STORY WITH AN INTIMATE PHOTOSHOOT.",
-            "INCLUDES A 2.5-HOUR PHOTOSHOOT AND 25 PROFESSIONALLY EDITED IMAGES.",
-            "ADDITIONAL IMAGES CAN BE PURCHASED AT $10 EACH.",
+            "90-minute session",
+            "Maximum of 3 outfits",
+            "All edited images (approx. 20–30) + priority delivery",
           ],
         },
       ],
