@@ -7,45 +7,54 @@ import { cn } from "@/lib/utils";
 
 const faqs = [
   {
-    question: "WHAT TYPE OF PHOTOGRAPHY DO YOU SPECIALIZE IN?",
+    question: "What type of photography do you specialize in?",
     answer:
-      "I specialize in Portrait, Landscape, and Event photography, capturing moments that tell unique stories. My goal is to create timeless images that resonate with the viewer.",
+      "I specialize in natural, heartfelt photography — including maternity, newborn, family, portraits, headshots, and celebrations. My focus is on capturing real moments in a relaxed and enjoyable way.",
   },
   {
-    question: "HOW CAN I BOOK A PHOTOGRAPHY SESSION WITH YOU?",
+    question: "What if I’m not comfortable in front of the camera?",
     answer:
-      "Booking is simple! You can contact me through the 'Contact' form on this website/sidebar, or reach out via Instagram. I recommend booking at least 2 weeks in advance.",
+      "Most of my clients feel this way at first — and that’s completely okay. I’ll guide you gently throughout the session with natural prompts, so you never feel stiff or awkward.",
   },
   {
-    question: "WHAT EQUIPMENT DO YOU USE FOR YOUR PHOTOGRAPHY?",
+    question: "Can I request a specific location for the shoot?",
     answer:
-      "I use professional-grade Canon/Sony mirrorless cameras and a variety of prime lenses to ensure the highest quality images in any lighting condition.",
+      "Absolutely. Whether it’s your home, a favorite outdoor spot, or my studio, we’ll choose a location that feels right for you and fits the vision for your session.",
   },
   {
-    question: "CAN I REQUEST A SPECIFIC LOCATION FOR A SESSION?",
+    question: "What should we wear?",
     answer:
-      "Absolutely! I love exploring new locations. If you have a specific spot in mind, let me know. If not, I can suggest several beautiful locations based on your vision.",
+      "Once your session is booked, you’ll receive a simple styling guide to help you choose outfits that photograph beautifully and feel like you.",
   },
   {
-    question: "WHAT IS YOUR EDITING PROCESS LIKE?",
+    question: "How long does a session last?",
     answer:
-      "I personally edit every photo to ensure color accuracy and style consistency. My process involves color correction, exposure adjustment, and subtle retouching to enhance the natural beauty.",
+      "Most sessions last between 45–90 minutes, depending on the type of shoot. We always work at a relaxed pace — especially with children.",
   },
   {
-    question: "ARE DIGITAL FILES INCLUDED IN YOUR PHOTOGRAPHY PACKAGES?",
+    question: "Are digital images included?",
     answer:
-      "Yes, all my packages include high-resolution digital files. You will receive a private online gallery where you can download your photos.",
+      "Yes. Your package includes high-resolution, professionally edited digital images, delivered via a private online gallery. You’ll also have the option to order prints or albums if you wish.",
   },
   {
-    question: "DO YOU OFFER PRINTS OF YOUR PHOTOGRAPHS?",
+    question: "What is your editing process like?",
     answer:
-      "Yes, prints are available for purchase. You can order professional quality prints directly from your private online gallery.",
+      "I carefully edit each image for color, light, and consistency while keeping everything natural. My goal is to enhance your photos — not change how you look.",
   },
   {
-    question:
-      "HOW LONG DOES IT TAKE TO RECEIVE THE EDITED PHOTOS AFTER A SESSION?",
+    question: "When will we receive our photos?",
     answer:
-      "My typical turnaround time is 2 weeks. I will send you a few sneak peeks within 48 hours of our session!",
+      "Your final gallery will be delivered within 2–3 weeks after your session.",
+  },
+  {
+    question: "How do I book a session?",
+    answer:
+      "Simply click the Book Now button and follow the steps. If you have any questions before booking, feel free to get in touch.",
+  },
+  {
+    question: "Can we include our pets?",
+    answer:
+      "Yes! Pets are family too. Just let me know in advance so we can ensure our chosen location is pet-friendly.",
   },
 ];
 
@@ -68,15 +77,15 @@ export function Faq() {
         <p className="text-sm font-medium tracking-widest text-muted-foreground uppercase mb-2">
           FAQ'S
         </p>
-        <h2 className="text-3xl md:text-5xl font-serif tracking-tight text-[#2d5d4b] uppercase">
+        <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-[#2d5d4b] uppercase">
           Frequently Asked Questions
         </h2>
       </motion.div>
 
       <div className="grid md:grid-cols-2 border-t border-gray-200">
-        {/* Left Column (Indices 0, 1, 2, 3) */}
+        {/* Left Column (Indices 0, 1, 2, 3, 4) */}
         <div className="flex flex-col">
-          {faqs.slice(0, 4).map((faq, idx) => (
+          {faqs.slice(0, 5).map((faq, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, y: 20 }}
@@ -94,20 +103,20 @@ export function Faq() {
           ))}
         </div>
 
-        {/* Right Column (Indices 4, 5, 6, 7) */}
+        {/* Right Column (Indices 5, 6, 7, 8, 9) */}
         <div className="flex flex-col">
-          {faqs.slice(4).map((faq, idx) => (
+          {faqs.slice(5).map((faq, idx) => (
             <motion.div
-              key={idx + 4}
+              key={idx + 5}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: (idx + 4) * 0.1 }}
+              transition={{ duration: 0.4, delay: (idx + 5) * 0.1 }}
             >
               <FaqItem
                 faq={faq}
-                isOpen={openIndex === idx + 4}
-                onClick={() => toggleFaq(idx + 4)}
+                isOpen={openIndex === idx + 5}
+                onClick={() => toggleFaq(idx + 5)}
               />
             </motion.div>
           ))}

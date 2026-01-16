@@ -86,6 +86,8 @@ interface PhotoGridProps {
   photos?: PhotoItem[];
 }
 
+import { fadeInUp, scaleIn, staggerContainer } from "@/lib/animations";
+
 export function PhotoGrid({ photos = defaultPhotos }: PhotoGridProps) {
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
 
@@ -94,15 +96,19 @@ export function PhotoGrid({ photos = defaultPhotos }: PhotoGridProps) {
   };
 
   return (
-    <div className="grid grid-cols-2 gap-2 md:gap-4 lg:grid-cols-4 auto-rows-[250px] mb-16 -mx-1 md:mx-0">
+    <motion.div
+      className="grid grid-cols-2 gap-2 md:gap-4 lg:grid-cols-4 auto-rows-[250px] mb-16 -mx-1 md:mx-0"
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: false, margin: "-100px" }}
+    >
       {photos.map((photo, idx) => {
         if (photo.type === "cta" && photo.ctaContent) {
           return (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              variants={fadeInUp}
               className={cn(
                 "col-span-2 md:col-span-2 lg:col-span-4 row-span-1 flex flex-col items-center justify-center py-12 md:py-16 bg-muted/30 rounded-lg text-center px-4",
                 photo.className
@@ -126,10 +132,7 @@ export function PhotoGrid({ photos = defaultPhotos }: PhotoGridProps) {
         return (
           <motion.div
             key={idx}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay: idx * 0.05 }}
+            variants={scaleIn}
             className={cn(
               "relative overflow-hidden rounded-lg group bg-muted",
               photo.className
@@ -154,6 +157,6 @@ export function PhotoGrid({ photos = defaultPhotos }: PhotoGridProps) {
           </motion.div>
         );
       })}
-    </div>
+    </motion.div>
   );
 }

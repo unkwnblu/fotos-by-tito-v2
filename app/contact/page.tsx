@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Send } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { cn } from "@/lib/utils";
+import Img from "../../public/contact.jpg";
 
 export default function ContactPage() {
   const [selectedSubject, setSelectedSubject] = useState("General Inquiry");
@@ -24,7 +25,7 @@ export default function ContactPage() {
           <div className="relative w-full aspect-[4/5] lg:aspect-auto lg:h-full lg:min-h-[800px] overflow-hidden rounded-sm  p-2">
             <div className="relative w-full h-full overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=1000&auto=format&fit=crop"
+                src={Img}
                 alt="Abstract Art"
                 fill
                 className="object-cover rounded-xl"

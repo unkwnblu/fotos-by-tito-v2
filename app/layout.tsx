@@ -42,7 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${robotoFlex.variable} ${nunito.variable} antialiased`}
+        className={` ${robotoFlex.variable} ${nunito.variable} antialiased`}
       >
         <LayoutWrapper>
           {children}

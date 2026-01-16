@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 const categories = [
   {
@@ -33,20 +34,23 @@ export function WorkCategories() {
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-3xl md:text-5xl font-bold mb-12 text-center"
+          viewport={{ once: false, margin: "-100px" }}
+          className="text-3xl md:text-5xl font-bold mb-12 text-center text-[#2d5d4b] uppercase"
         >
-          Explore the work
+          Explore the works
         </motion.h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, margin: "-100px" }}
+        >
           {categories.map((category, index) => (
             <motion.div
               key={category.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              variants={fadeInUp}
               className="group relative aspect-[4/5] overflow-hidden rounded-xl cursor-pointer"
             >
               <Link href={category.href} className="block w-full h-full">
@@ -67,7 +71,7 @@ export function WorkCategories() {
               </Link>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -28,3 +28,7 @@ h5,
 h6 {
   font-family: var(--font-roboto-flex);
 }
+
+p {
+  font-family: var(--font-nunito);
+}

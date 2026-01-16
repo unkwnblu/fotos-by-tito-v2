@@ -17,11 +17,13 @@ export function ScrollReveal({
   direction = "up",
   delay = 0,
 }: ScrollRevealProps) {
+  // Use shared variant for consistency, but allow direction overrides if needed in future
+  // For now, mapping direction back to simple props or extended variants
   const directions = {
-    up: { y: 50, x: 0 },
-    down: { y: -50, x: 0 },
-    left: { x: 50, y: 0 },
-    right: { x: -50, y: 0 },
+    up: { y: 40, x: 0 },
+    down: { y: -40, x: 0 },
+    left: { x: 40, y: 0 },
+    right: { x: -40, y: 0 },
   };
 
   const initial = { opacity: 0, ...directions[direction] };
@@ -30,8 +32,8 @@ export function ScrollReveal({
     <motion.div
       initial={initial}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: false, margin: "-50px" }} // Triggers when in view, margin adjusts trigger point
-      transition={{ duration: 0.8, ease: "easeOut", delay }}
+      viewport={{ once: false, margin: "-100px" }}
+      transition={{ duration: 0.6, ease: "easeOut", delay }}
       className={cn(className)}
     >
       {children}

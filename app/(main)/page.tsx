@@ -11,11 +11,10 @@ import { ScrollReveal } from "@/components/scroll-reveal";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background p-2 sm:p-8">
+    <div className="min-h-screen bg-background">
+      {/* Photo Grid */}
       <ScrollReveal>
-        <h2 className="text-4xl md:text-6xl font-bold uppercase tracking-tight text-center my-12 text-[#2d5d4b] leading-tight">
-          Photography that feels like you <br />- honest warm, timeless
-        </h2>
+        <PhotoGrid />
       </ScrollReveal>
 
       <ScrollReveal delay={0.2}>
@@ -27,11 +26,6 @@ export default function Home() {
             Explore Portfolio
           </Link>
         </div>
-      </ScrollReveal>
-
-      {/* Photo Grid */}
-      <ScrollReveal>
-        <PhotoGrid />
       </ScrollReveal>
 
       {/* Why Work With Me Section */}

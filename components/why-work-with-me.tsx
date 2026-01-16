@@ -2,6 +2,7 @@
 
 import { Sparkles, Hourglass, Heart } from "lucide-react";
 import { motion } from "framer-motion";
+import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 export function WhyWorkWithMe() {
   const pillars = [
@@ -23,28 +24,19 @@ export function WhyWorkWithMe() {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-background">
+    <section className="py-10 md:py-10 bg-background">
       <div className="container mx-auto px-4 max-w-6xl">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, margin: "-100px" }}
         >
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            More than photos — an experience designed around you.
-          </h2>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
           {pillars.map((pillar, index) => (
             <motion.div
               key={pillar.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
+              variants={fadeInUp}
               className="flex flex-col items-center text-center space-y-4"
             >
               <div className="bg-[#2d5d4b]/10 p-4 rounded-full text-[#2d5d4b]">
@@ -56,20 +48,6 @@ export function WhyWorkWithMe() {
               </p>
             </motion.div>
           ))}
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="text-center max-w-3xl mx-auto"
-        >
-          <p className="text-lg md:text-xl font-medium text-[#2d5d4b]">
-            When you book with me, you’re not just booking photos — you’re
-            investing in an experience you’ll enjoy and images you’ll truly
-            love.
-          </p>
         </motion.div>
       </div>
     </section>

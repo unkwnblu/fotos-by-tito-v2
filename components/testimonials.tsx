@@ -21,6 +21,8 @@ const testimonials = [
   },
 ];
 
+import { fadeInUp, staggerContainer } from "@/lib/animations";
+
 export function Testimonials() {
   return (
     <section className="py-16 md:py-24 bg-muted/30">
@@ -29,19 +31,22 @@ export function Testimonials() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl md:text-5xl font-bold mb-16 text-center"
+          className="text-3xl md:text-5xl font-bold mb-16 text-center text-[#2d5d4b] uppercase"
         >
-          Kind words from people I’ve photographed
+          Stories & Reviews
         </motion.h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, margin: "-100px" }}
+        >
           {testimonials.map((t, index) => (
             <motion.div
               key={t.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              variants={fadeInUp}
               className="bg-background p-8 rounded-xl shadow-sm border border-border/50 flex flex-col items-start"
             >
               <div className="flex gap-1 mb-4 text-[#2d5d4b]">
@@ -57,7 +62,7 @@ export function Testimonials() {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
