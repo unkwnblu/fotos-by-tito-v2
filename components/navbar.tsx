@@ -70,6 +70,38 @@ export function Navbar({ user, role }: NavbarProps) {
                   {link.name}
                 </Link>
               ))}
+              <div className="flex flex-col items-center gap-6 pt-4 border-t w-full max-w-xs">
+                {user ? (
+                  <>
+                    {role === "admin" && (
+                      <Link
+                        href="/admin"
+                        onClick={toggleMenu}
+                        className="text-xl font-bold uppercase tracking-widest text-primary hover:text-primary/80 transition-colors"
+                      >
+                        Dashboard
+                      </Link>
+                    )}
+                    <button
+                      onClick={async () => {
+                        await signOut();
+                      }}
+                      className="text-xl font-bold uppercase tracking-widest text-muted-foreground hover:text-red-500 transition-colors"
+                    >
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    href="/login"
+                    onClick={toggleMenu}
+                    className="text-xl font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    Login
+                  </Link>
+                )}
+              </div>
+
               <div className="flex items-center gap-4 pt-4">
                 <Link
                   href="https://instagram.com"

@@ -34,6 +34,7 @@ export default async function AdminSettingsPage() {
               </div>
               <div className="border-t pt-2 mt-2">
                 <p className="text-muted-foreground text-xs leading-relaxed">
+                  Developed by Blu Devs <br />
                   Protected by Supabase Auth & RLS. <br />
                   Timezone: UTC
                 </p>
