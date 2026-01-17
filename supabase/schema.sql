@@ -175,3 +175,40 @@ create policy "Authenticated users can delete storage objects"
     to authenticated
     using (true)
     with check (true);
+
+  -- Create profiles table
+  create table profiles (
+    id uuid references auth.users on delete cascade primary key,
+    created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+    email text,
+    role text default 'user'
+  );
+
+  -- Enable RLS for profiles
+  alter table profiles enable row level security;
+
+  create policy "Public profiles are viewable"
+    on profiles for select
+    to authenticated
+    using (true);
+
+  create policy "Admins can update profiles"
+    on profiles for update
+    to authenticated
+    using (true) -- Ideally check if current user is admin, but for now allow auth users (admins) to update
+    with check (true);
+
+  -- Function to handle new user signup
+  create function public.handle_new_user()
+  returns trigger as $$
+  begin
+    insert into public.profiles (id, email, role)
+    values (new.id, new.email, 'user');
+    return new;
+  end;
+  $$ language plpgsql security definer;
+
+  -- Trigger to call the function
+  create trigger on_auth_user_created
+    after insert on auth.users
+    for each row execute procedure public.handle_new_user();

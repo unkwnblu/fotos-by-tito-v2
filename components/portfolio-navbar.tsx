@@ -9,7 +9,15 @@ import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-export function PortfolioNavbar() {
+import { User } from "@supabase/supabase-js";
+import { signOut } from "@/app/actions/auth";
+
+interface PortfolioNavbarProps {
+  user: User | null;
+  role: string | null;
+}
+
+export function PortfolioNavbar({ user, role }: PortfolioNavbarProps) {
   const pathname = usePathname();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -108,6 +116,33 @@ export function PortfolioNavbar() {
                 {link.name}
               </Link>
             ))}
+            {user ? (
+              <>
+                {role === "admin" && (
+                  <Link
+                    href="/admin"
+                    className="text-sm font-bold tracking-[0.2em] text-primary transition-colors hover:text-primary/80"
+                  >
+                    DASHBOARD
+                  </Link>
+                )}
+                <button
+                  onClick={async () => {
+                    await signOut();
+                  }}
+                  className="text-sm font-bold tracking-[0.2em] text-muted-foreground transition-colors hover:text-red-500"
+                >
+                  LOGOUT
+                </button>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                className="text-sm font-bold tracking-[0.2em] text-muted-foreground transition-colors hover:text-primary"
+              >
+                LOGIN
+              </Link>
+            )}
           </div>
         </div>
 
@@ -149,6 +184,37 @@ export function PortfolioNavbar() {
                   {link.name}
                 </Link>
               ))}
+              <div className="flex items-center gap-4 pt-4">
+                {user ? (
+                  <>
+                    {role === "admin" && (
+                      <Link
+                        href="/admin"
+                        onClick={() => setIsOpen(false)}
+                        className="text-xl font-bold uppercase text-primary hover:text-primary/80"
+                      >
+                        Dashboard
+                      </Link>
+                    )}
+                    <button
+                      onClick={async () => {
+                        await signOut();
+                      }}
+                      className="text-xl font-bold uppercase text-red-500 hover:text-red-600"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    href="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="text-xl font-bold uppercase text-muted-foreground hover:text-primary"
+                  >
+                    Login
+                  </Link>
+                )}
+              </div>
               <div className="flex items-center gap-4 pt-4">
                 <Link
                   href="https://instagram.com"

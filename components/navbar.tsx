@@ -9,8 +9,15 @@ import Image from "next/image";
 import { useState } from "react";
 
 import { cn } from "@/lib/utils";
+import { User } from "@supabase/supabase-js";
+import { signOut } from "@/app/actions/auth";
 
-export function Navbar() {
+interface NavbarProps {
+  user: User | null;
+  role: string | null;
+}
+
+export function Navbar({ user, role }: NavbarProps) {
   const pathname = usePathname();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -109,6 +116,36 @@ export function Navbar() {
 
         {/* Bottom: Controls + Copyright */}
         <div className="flex flex-col space-y-6 pb-4">
+          <div className="flex flex-col gap-2 items-center">
+            {user ? (
+              <>
+                {role === "admin" && (
+                  <Link
+                    href="/admin"
+                    className="text-xs font-bold uppercase tracking-widest text-primary hover:text-primary/80 transition-colors"
+                  >
+                    Dashboard
+                  </Link>
+                )}
+                <button
+                  onClick={async () => {
+                    await signOut();
+                  }}
+                  className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-red-500 transition-colors"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+              >
+                Login
+              </Link>
+            )}
+          </div>
+
           {/* Controls: Theme Toggle (Left) + Instagram (Right) */}
           <div className="flex items-center justify-between px-2">
             <Link
