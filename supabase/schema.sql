@@ -46,32 +46,132 @@ create policy "Authenticated users can delete storage objects"
   to authenticated
   using (bucket_id = 'photos');
 
--- Create categories table
-create table categories (
-  id text primary key, -- slug like 'portraits'
-  title text not null, -- Display name like 'Portraits & Headshots'
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
+  -- Create categories table
+  create table categories (
+    id text primary key, -- slug like 'portraits'
+    title text not null, -- Display name like 'Portraits & Headshots'
+    created_at timestamp with time zone default timezone('utc'::text, now()) not null
+  );
 
--- Enable RLS for categories
-alter table categories enable row level security;
+  -- Enable RLS for categories
+  alter table categories enable row level security;
 
-create policy "Public categories are viewable"
-  on categories for select
-  to public
-  using (true);
+  create policy "Public categories are viewable"
+    on categories for select
+    to public
+    using (true);
 
-create policy "Authenticated users can manage categories"
-  on categories for all
-  to authenticated
-  using (true)
-  with check (true);
+  create policy "Authenticated users can manage categories"
+    on categories for all
+    to authenticated
+    using (true)
+    with check (true);
 
--- Seed initial categories
-insert into categories (id, title) values
-  ('portraits', 'PORTRAITS & HEADSHOTS'),
-  ('newborns', 'NEWBORNS'),
-  ('maternity', 'MATERNITY'),
-  ('family-milestones', 'FAMILY & MILESTONES'),
-  ('christmas', 'CHRISTMAS')
-on conflict (id) do nothing;
+  -- Seed initial categories
+  insert into categories (id, title) values
+    ('portraits', 'PORTRAITS & HEADSHOTS'),
+    ('newborns', 'NEWBORNS'),
+    ('maternity', 'MATERNITY'),
+    ('family-milestones', 'FAMILY & MILESTONES'),
+    ('christmas', 'CHRISTMAS')
+  on conflict (id) do nothing;
+
+  -- Create bookings table
+  create table bookings (
+    id uuid default gen_random_uuid() primary key,
+    created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+    name text not null,
+    email text not null,
+    phone text,
+    message text,
+    package_name text not null,
+    package_price text not null,
+    category_title text not null,
+    status text not null default 'pending' -- pending, confirmed, completed, cancelled
+  );
+
+  -- Enable RLS for bookings
+  alter table bookings enable row level security;
+
+  create policy "Public can create bookings"
+    on bookings for insert
+    to public
+    with check (true);
+
+  create policy "Authenticated users can view bookings"
+    on bookings for select
+    to authenticated
+    using (true);
+
+  create policy "Authenticated users can update bookings"
+    on bookings for update
+    to authenticated
+    using (true)
+    with check (true);
+
+  create policy "Authenticated users can delete bookings"
+    on bookings for delete
+    to authenticated
+    using (true);
+
+  -- Create messages table
+  create table messages (
+    id uuid default gen_random_uuid() primary key,
+    created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+    first_name text not null,
+    last_name text not null,
+    email text not null,
+    phone text,
+    subject text not null,
+    message text not null,
+    status text not null default 'unread' -- unread, read, replied
+  );
+
+  -- Enable RLS for messages
+  alter table messages enable row level security;
+
+  create policy "Public can insert messages"
+    on messages for insert
+    to public
+    with check (true);
+
+  create policy "Authenticated users can view messages"
+    on messages for select
+    to authenticated
+    using (true);
+
+  create policy "Authenticated users can update messages"
+    on messages for update
+    to authenticated
+    using (true)
+    with check (true);
+
+  create policy "Authenticated users can delete messages"
+    on messages for delete
+    to authenticated
+    using (true);
+
+  -- Create testimonials table
+  create table testimonials (
+    id uuid default gen_random_uuid() primary key,
+    created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+    name text not null,
+    location text not null,
+    text text not null,
+    rating integer not null default 5,
+    image_url text
+  );
+
+  -- Enable RLS for testimonials
+  alter table testimonials enable row level security;
+
+  create policy "Public can view testimonials"
+    on testimonials for select
+    to public
+    using (true);
+
+  create policy "Authenticated users can manage testimonials"
+    on testimonials for all
+    to authenticated
+    using (true)
+    with check (true);

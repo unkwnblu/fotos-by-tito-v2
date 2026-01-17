@@ -15,7 +15,13 @@ export default async function Home() {
   let photos = await getAllPhotos(18);
 
   // Fetch categories for the "Explore the work" section (thumbnails)
-  const categories = await getPhotosForEachCategory(1);
+  const allCategories = await getPhotosForEachCategory(1);
+
+  // Filter and Sort: Portraits, Family, Newborns (Top 3)
+  const featuredSlugs = ["portraits", "family-milestones", "newborns"];
+  const categories = featuredSlugs
+    .map((slug) => allCategories.find((c) => c.id === slug))
+    .filter((c) => c !== undefined);
 
   // Layout Logic:
   // The grid pattern repeats every 6 items (forming a perfect rectangle).

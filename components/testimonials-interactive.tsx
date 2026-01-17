@@ -97,44 +97,61 @@ export function TestimonialsInteractive() {
   return (
     <div className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-black/20">
       {/* Animated Background */}
-      <div className="absolute inset-0 -z-10 bg-neutral-950 overflow-hidden">
+      {/* NEW Animated Background */}
+      <div className="absolute inset-0 -z-10 bg-[#0a0a0a] overflow-hidden">
+        {/* Base Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0c1220] via-[#050a14] to-black opacity-90" />
+
+        {/* Aurora 1: Emerald (Brand) */}
         <motion.div
-          className="absolute top-[-20%] left-[-10%] h-[500px] w-[500px] rounded-full bg-emerald-900/20 blur-[120px]"
+          className="absolute top-[-10%] left-[-10%] h-[600px] w-[600px] rounded-full bg-[#2d5d4b]/20 blur-[100px]"
           animate={{
-            x: [0, 100, 0],
-            y: [0, 50, 0],
+            x: [0, 50, 0],
+            y: [0, 30, 0],
+            scale: [1, 1.1, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+
+        {/* Aurora 2: Deep Purple/Blue (Depth) */}
+        <motion.div
+          className="absolute bottom-[-10%] right-[-10%] h-[800px] w-[800px] rounded-full bg-indigo-900/20 blur-[120px]"
+          animate={{
+            x: [0, -50, 0],
             scale: [1, 1.2, 1],
           }}
           transition={{
             duration: 20,
             repeat: Infinity,
-            ease: "linear",
+            ease: "easeInOut",
           }}
         />
+
+        {/* Aurora 3: Warm Accent (Gold/Amber) */}
         <motion.div
-          className="absolute bottom-[-20%] right-[-10%] h-[600px] w-[600px] rounded-full bg-blue-900/10 blur-[120px]"
+          className="absolute top-[30%] left-[60%] h-[400px] w-[400px] rounded-full bg-amber-900/10 blur-[90px]"
           animate={{
-            x: [0, -100, 0],
-            y: [0, -50, 0],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        />
-        <motion.div
-          className="absolute top-[40%] left-[30%] h-[400px] w-[400px] rounded-full bg-purple-900/10 blur-[120px]"
-          animate={{
-            x: [0, 50, 0],
-            y: [0, 100, 0],
-            opacity: [0.3, 0.6, 0.3],
+            x: [0, -30, 30, 0],
+            y: [0, 50, 0],
           }}
           transition={{
             duration: 18,
             repeat: Infinity,
             ease: "easeInOut",
+          }}
+        />
+
+        {/* Texture Overlay (Grain) */}
+        <div
+          className="absolute inset-0 opacity-[0.03] pointer-events-none"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
           }}
         />
       </div>

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send } from "lucide-react";
+import { X, Send, Loader2 } from "lucide-react";
+import { createBooking } from "@/app/bookings/actions";
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -14,36 +15,33 @@ interface BookingModalProps {
   } | null;
 }
 
+const initialState = {
+  message: "",
+  success: false,
+  error: "",
+};
+
 export function BookingModal({
   isOpen,
   onClose,
   packageDetails,
 }: BookingModalProps) {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [state, formAction, isPending] = useActionState(
+    createBooking,
+    initialState
+  );
+
+  useEffect(() => {
+    if (state.success) {
+      const timer = setTimeout(() => {
+        onClose();
+        // Ideally reset form state here if persistent, but modal unmounts
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [state.success, onClose]);
 
   if (!isOpen && !packageDetails) return null;
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    setTimeout(() => {
-      onClose();
-      setTimeout(() => {
-        setIsSuccess(false);
-        setFormData({ name: "", email: "", phone: "", message: "" });
-      }, 300);
-    }, 2000);
-  };
 
   return (
     <AnimatePresence>
@@ -97,7 +95,7 @@ export function BookingModal({
                   <X className="w-5 h-5" />
                 </button>
 
-                {isSuccess ? (
+                {state.success ? (
                   <div className="h-full flex flex-col items-center justify-center text-center space-y-6 min-h-[300px]">
                     <div className="w-20 h-20 bg-[#2d5d4b]/10 rounded-full flex items-center justify-center text-[#2d5d4b]">
                       <Send className="w-10 h-10" />
@@ -113,7 +111,29 @@ export function BookingModal({
                     </div>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form action={formAction} className="space-y-6">
+                    <input
+                      type="hidden"
+                      name="package_name"
+                      value={packageDetails.name}
+                    />
+                    <input
+                      type="hidden"
+                      name="package_price"
+                      value={packageDetails.price}
+                    />
+                    <input
+                      type="hidden"
+                      name="category_title"
+                      value={packageDetails.categoryTitle}
+                    />
+
+                    {state.error && (
+                      <div className="p-3 rounded-md bg-red-100 text-red-700 text-sm">
+                        {state.error}
+                      </div>
+                    )}
+
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 gap-4">
                         <div className="space-y-2">
@@ -122,12 +142,9 @@ export function BookingModal({
                           </label>
                           <input
                             required
+                            name="name"
                             type="text"
                             placeholder="John Doe"
-                            value={formData.name}
-                            onChange={(e) =>
-                              setFormData({ ...formData, name: e.target.value })
-                            }
                             className="w-full bg-muted/30 hover:bg-muted/50 focus:bg-muted/50 rounded-lg px-4 py-3 outline-none transition-colors text-foreground placeholder:text-muted-foreground/40 font-medium"
                           />
                         </div>
@@ -138,15 +155,9 @@ export function BookingModal({
                           </label>
                           <input
                             required
+                            name="email"
                             type="email"
                             placeholder="john@example.com"
-                            value={formData.email}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                email: e.target.value,
-                              })
-                            }
                             className="w-full bg-muted/30 hover:bg-muted/50 focus:bg-muted/50 rounded-lg px-4 py-3 outline-none transition-colors text-foreground placeholder:text-muted-foreground/40 font-medium"
                           />
                         </div>
@@ -158,11 +169,8 @@ export function BookingModal({
                         </label>
                         <input
                           type="tel"
+                          name="phone"
                           placeholder="+1 (555) 000-0000"
-                          value={formData.phone}
-                          onChange={(e) =>
-                            setFormData({ ...formData, phone: e.target.value })
-                          }
                           className="w-full bg-muted/30 hover:bg-muted/50 focus:bg-muted/50 rounded-lg px-4 py-3 outline-none transition-colors text-foreground placeholder:text-muted-foreground/40 font-medium"
                         />
                       </div>
@@ -173,14 +181,8 @@ export function BookingModal({
                         </label>
                         <textarea
                           rows={3}
+                          name="message"
                           placeholder="Tell me about your vision..."
-                          value={formData.message}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              message: e.target.value,
-                            })
-                          }
                           className="w-full bg-muted/30 hover:bg-muted/50 focus:bg-muted/50 rounded-lg px-4 py-3 outline-none transition-colors resize-none text-foreground placeholder:text-muted-foreground/40 font-medium"
                         />
                       </div>
@@ -188,11 +190,14 @@ export function BookingModal({
 
                     <button
                       type="submit"
-                      disabled={isSubmitting}
+                      disabled={isPending}
                       className="w-full bg-[#2d5d4b] text-white py-4 rounded-lg font-bold uppercase tracking-widest hover:bg-[#1e3d32] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2 shadow-lg shadow-[#2d5d4b]/20"
                     >
-                      {isSubmitting ? (
-                        "Sending..."
+                      {isPending ? (
+                        <>
+                          Sending{" "}
+                          <Loader2 className="w-4 h-4 ml-1 animate-spin" />
+                        </>
                       ) : (
                         <>
                           Send Request <Send className="w-4 h-4 ml-1" />
