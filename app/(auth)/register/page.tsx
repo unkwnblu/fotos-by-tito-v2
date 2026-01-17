@@ -4,14 +4,14 @@ import Link from "next/link";
 import { useState, useActionState } from "react";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { login } from "./actions";
+import { signup } from "./actions";
 
 const initialState = {
   error: "",
 };
 
-export default function LoginPage() {
-  const [state, formAction, isPending] = useActionState(login, initialState);
+export default function RegisterPage() {
+  const [state, formAction, isPending] = useActionState(signup, initialState);
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -21,9 +21,9 @@ export default function LoginPage() {
       transition={{ duration: 0.5 }}
     >
       <div className="flex flex-col space-y-2 text-left mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Create an account</h1>
         <p className="text-sm text-muted-foreground">
-          Enter your email below to sign in to your account
+          Enter your email below to create your account
         </p>
       </div>
 
@@ -58,12 +58,6 @@ export default function LoginPage() {
                 >
                   Password
                 </label>
-                <Link
-                  href="/pwd-reset"
-                  className="text-xs font-medium text-primary hover:text-primary/80 hover:underline underline-offset-4"
-                >
-                  Forgot password?
-                </Link>
               </div>
               <div className="relative">
                 <input
@@ -72,7 +66,7 @@ export default function LoginPage() {
                   placeholder="Password"
                   type={showPassword ? "text" : "password"}
                   autoCapitalize="none"
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   disabled={isPending}
                   required
                   className="flex h-11 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pr-10"
@@ -102,7 +96,7 @@ export default function LoginPage() {
               className="inline-flex h-11 items-center justify-center rounded-md bg-primary text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 font-medium bg-black text-white dark:bg-white dark:text-black mt-4"
             >
               {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Sign In
+              Create Account
             </button>
           </div>
         </form>
@@ -117,12 +111,12 @@ export default function LoginPage() {
           </div>
         </div>
         <div className="text-center text-sm text-muted-foreground">
-          Don&apos;t have an account?{" "}
+          Already have an account?{" "}
           <Link
-            href="/register"
+            href="/login"
             className="font-semibold text-primary underline-offset-4 hover:underline"
           >
-            Sign up
+            Sign in
           </Link>
         </div>
       </div>

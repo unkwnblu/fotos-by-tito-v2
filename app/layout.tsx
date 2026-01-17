@@ -1,20 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Nunito, Roboto_Flex } from "next/font/google";
+import { Nunito, Roboto_Flex } from "next/font/google";
 import "./globals.css";
-
-import { ScrollToTop } from "@/components/scroll-to-top";
-
-import { LayoutWrapper } from "@/components/layout-wrapper";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 const robotoFlex = Roboto_Flex({
   variable: "--font-roboto-flex",
@@ -34,6 +20,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { Toaster } from "sonner";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -44,10 +32,8 @@ export default function RootLayout({
       <body
         className={` ${robotoFlex.variable} ${nunito.variable} antialiased`}
       >
-        <LayoutWrapper>
-          {children}
-          <ScrollToTop />
-        </LayoutWrapper>
+        <Toaster position="top-center" richColors />
+        {children}
       </body>
     </html>
   );

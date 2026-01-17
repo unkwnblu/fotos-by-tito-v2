@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
-import { categories, CategoryData } from "@/lib/data";
+import { CategoryData } from "@/lib/data";
 
 function CategorySection({ data }: { data: CategoryData }) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -25,8 +25,16 @@ function CategorySection({ data }: { data: CategoryData }) {
     }
   };
 
-  // Duplicate images to create an "infinite" feel
-  const displayImages = Array(20).fill(data.images).flat();
+  // If no images, we can hide the carousel or show a placeholder?
+  // Let's hide if empty.
+  if (!data.images || data.images.length === 0) {
+    return null;
+  }
+
+  const displayImages =
+    data.images.length > 5
+      ? data.images
+      : [...data.images, ...data.images, ...data.images]; // duplicate for fuller look if few images
 
   return (
     <div className="flex flex-col gap-6 py-4">
@@ -41,20 +49,24 @@ function CategorySection({ data }: { data: CategoryData }) {
           </h2>
         </Link>
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => scroll("left")}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition-transform hover:scale-105 active:scale-95 disabled:opacity-50"
-            aria-label="Scroll left"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <button
-            onClick={() => scroll("right")}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition-transform hover:scale-105 active:scale-95 disabled:opacity-50"
-            aria-label="Scroll right"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
+          {displayImages.length > 3 && (
+            <>
+              <button
+                onClick={() => scroll("left")}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition-transform hover:scale-105 active:scale-95 disabled:opacity-50"
+                aria-label="Scroll left"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                onClick={() => scroll("right")}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition-transform hover:scale-105 active:scale-95 disabled:opacity-50"
+                aria-label="Scroll right"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </>
+          )}
         </div>
       </div>
 
@@ -83,9 +95,24 @@ function CategorySection({ data }: { data: CategoryData }) {
 }
 
 import { motion } from "framer-motion";
-import { fadeInUp, staggerContainer } from "@/lib/animations";
+import { fadeInUp } from "@/lib/animations";
 
-export function PortfolioCategories() {
+export function PortfolioCategories({
+  categories,
+}: {
+  categories: CategoryData[];
+}) {
+  // If all categories are empty, show message?
+  const hasImages = categories.some((c) => c.images.length > 0);
+
+  if (!hasImages) {
+    return (
+      <div className="text-center py-20 text-muted-foreground">
+        <p>No photos uploaded to any category yet.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-2 py-12">
       {categories.map((category) => (

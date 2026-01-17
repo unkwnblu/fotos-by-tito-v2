@@ -6,7 +6,7 @@ import { Send } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { cn } from "@/lib/utils";
 import { ScrollReveal } from "@/components/scroll-reveal";
-import Img from "../../public/contact.jpg";
+import Img from "@/public/contact.jpg";
 
 export default function ContactPage() {
   const [selectedSubject, setSelectedSubject] = useState("General Inquiry");

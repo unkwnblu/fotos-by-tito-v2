@@ -4,13 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { MoveRight, Star } from "lucide-react";
 
-const slides = [
+const defaultSlides = [
   "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2071&auto=format&fit=crop", // Landscape person
   "https://images.unsplash.com/photo-1554080353-a576cf803bda?q=80&w=1000&auto=format&fit=crop", // Photography
   "https://images.unsplash.com/photo-1623945419047-4f6534570076?q=80&w=2071&auto=format&fit=crop", // Architecture/Abstract
 ];
 
-export function PortfolioHero() {
+export function PortfolioHero({ images = [] }: { images?: string[] }) {
+  const slides = images.length > 0 ? images : defaultSlides;
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export function PortfolioHero() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.5 }}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover object-[50%_25%]"
           />
         </AnimatePresence>
         <div className="absolute inset-0 bg-black/10" />
