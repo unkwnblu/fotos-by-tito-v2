@@ -9,6 +9,7 @@ import { format } from "date-fns";
 
 export default function AdminDashboard() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [displayName, setDisplayName] = useState<string | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -16,7 +17,20 @@ export default function AdminDashboard() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (user) setUserEmail(user.email ?? null);
+      if (user) {
+        setUserEmail(user.email ?? null);
+
+        // Fetch profile for display name
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("display_name")
+          .eq("id", user.id)
+          .single();
+
+        if (profile?.display_name) {
+          setDisplayName(profile.display_name);
+        }
+      }
     }
     getUser();
   }, [supabase]);
@@ -30,8 +44,8 @@ export default function AdminDashboard() {
             Dashboard
           </h1>
           <p className="text-muted-foreground mt-1">
-            Welcome back, {userEmail?.split("@")[0] || "Admin"}. Here's what's
-            happening today.
+            Welcome back, {displayName || userEmail?.split("@")[0] || "Admin"}.
+            Here's what's happening today.
           </p>
         </div>
         <div className="text-sm font-medium bg-muted/50 px-4 py-2 rounded-full border">

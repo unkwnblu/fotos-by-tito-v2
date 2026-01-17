@@ -114,3 +114,20 @@ export async function removeAdmin(id: string) {
   revalidatePath("/admin/settings");
   return { success: true };
 }
+
+// Update Display Name
+export async function updateDisplayName(userId: string, displayName: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ display_name: displayName })
+    .eq("id", userId);
+
+  if (error) {
+    return { error: "Failed to update display name" };
+  }
+
+  revalidatePath("/admin/settings");
+  return { success: true };
+}

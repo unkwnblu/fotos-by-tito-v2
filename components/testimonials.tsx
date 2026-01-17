@@ -3,7 +3,9 @@
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
-const testimonials = [
+import { Testimonial } from "@/lib/testimonials";
+
+const fallbackTestimonials = [
   {
     name: "Emily Johnson",
     text: "Damien's photography doesn't just capture moments; it captures emotions. His work is simply mesmerizing.",
@@ -23,7 +25,16 @@ const testimonials = [
 
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
-export function Testimonials() {
+export function Testimonials({
+  testimonials = [],
+}: {
+  testimonials?: Testimonial[];
+}) {
+  const displayTestimonials =
+    testimonials && testimonials.length > 0
+      ? testimonials
+      : fallbackTestimonials;
+
   return (
     <section className="py-16 md:py-24 bg-muted/30">
       <div className="container mx-auto px-4 max-w-6xl">
@@ -43,9 +54,9 @@ export function Testimonials() {
           whileInView="visible"
           viewport={{ once: false, margin: "-100px" }}
         >
-          {testimonials.map((t, index) => (
+          {displayTestimonials.map((t, index) => (
             <motion.div
-              key={t.name}
+              key={index}
               variants={fadeInUp}
               className="bg-background p-8 rounded-xl shadow-sm border border-border/50 flex flex-col items-start"
             >

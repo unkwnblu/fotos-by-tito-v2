@@ -18,13 +18,16 @@ import {
   sendAdminOtp,
   verifyAndCreateAdmin,
   removeAdmin,
+  updateDisplayName,
 } from "@/app/admin/settings/actions";
+import { Edit2 } from "lucide-react"; // Added Edit2 icon
 
 interface Profile {
   id: string;
   created_at: string;
   email: string;
   role: string;
+  display_name?: string;
 }
 
 export function SettingsManager({
@@ -35,11 +38,15 @@ export function SettingsManager({
   const [admins, setAdmins] = useState<Profile[]>(initialAdmins);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Flow State
+  // Flow State for Adding Admin
   const [step, setStep] = useState<"email" | "otp">("email");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  // State for Editing Name
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editName, setEditName] = useState("");
 
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +74,6 @@ export function SettingsManager({
       toast.success("Admin created successfully!");
       setIsModalOpen(false);
       resetForm();
-      // Reload to fetch new list
       window.location.reload();
     }
   };
@@ -79,6 +85,19 @@ export function SettingsManager({
     const result = await removeAdmin(id);
     if (result.error) toast.error(result.error);
     else toast.success("Admin removed");
+  };
+
+  const handleUpdateName = async (id: string) => {
+    const result = await updateDisplayName(id, editName);
+    if (result.error) {
+      toast.error(result.error);
+    } else {
+      toast.success("Display name updated");
+      setAdmins((prev) =>
+        prev.map((a) => (a.id === id ? { ...a, display_name: editName } : a))
+      );
+      setEditingId(null);
+    }
   };
 
   const resetForm = () => {
@@ -118,14 +137,56 @@ export function SettingsManager({
               className="p-4 flex items-center justify-between hover:bg-muted/50 transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
                   <User className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="font-medium text-sm">{admin.email}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Added {format(new Date(admin.created_at), "MMM d, yyyy")}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    {editingId === admin.id ? (
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={editName}
+                          onChange={(e) => setEditName(e.target.value)}
+                          className="text-sm border rounded px-2 py-1 h-7"
+                          autoFocus
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") handleUpdateName(admin.id);
+                            if (e.key === "Escape") setEditingId(null);
+                          }}
+                        />
+                        <button
+                          onClick={() => handleUpdateName(admin.id)}
+                          className="text-xs bg-green-600 text-white px-2 py-1 rounded"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={() => setEditingId(null)}
+                          className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 group">
+                        <p className="font-bold text-sm">
+                          {admin.display_name || "No Name Set"}
+                        </p>
+                        <button
+                          onClick={() => {
+                            setEditingId(admin.id);
+                            setEditName(admin.display_name || "");
+                          }}
+                          className="opacity-0 group-hover:opacity-100 p-1 text-muted-foreground hover:text-primary transition-all"
+                          title="Edit Name"
+                        >
+                          <Edit2 className="w-3 h-3" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground">{admin.email}</p>
                 </div>
               </div>
 

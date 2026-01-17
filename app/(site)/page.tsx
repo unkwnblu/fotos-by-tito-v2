@@ -8,7 +8,8 @@ import { WorkCategories } from "@/components/work-categories";
 import { Testimonials } from "@/components/testimonials";
 import { Footer } from "@/components/footer";
 import { ScrollReveal } from "@/components/scroll-reveal";
-import { getAllPhotos, getPhotosForEachCategory } from "@/lib/photos"; // Added import
+import { getAllPhotos, getPhotosForEachCategory } from "@/lib/photos";
+import { getTestimonials } from "@/lib/testimonials";
 
 export default async function Home() {
   // Fetch up to 18 photos (3 full blocks of 6)
@@ -52,6 +53,9 @@ export default async function Home() {
     });
   }
 
+  // Fetch Testimonials
+  const testimonials = await getTestimonials(3);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Photo Grid */}
@@ -93,7 +97,7 @@ export default async function Home() {
 
       {/* Testimonials */}
       <ScrollReveal>
-        <Testimonials />
+        <Testimonials testimonials={testimonials} />
       </ScrollReveal>
 
       {/* FAQ Section */}
