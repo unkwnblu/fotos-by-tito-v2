@@ -8,12 +8,13 @@ import { WorkCategories } from "@/components/work-categories";
 import { Testimonials } from "@/components/testimonials";
 import { Footer } from "@/components/footer";
 import { ScrollReveal } from "@/components/scroll-reveal";
-import { getAllPhotos, getPhotosForEachCategory } from "@/lib/photos";
+import { getHomepageImages } from "@/lib/homepage";
+import { getPhotosForEachCategory } from "@/lib/photos";
 import { getTestimonials } from "@/lib/testimonials";
 
 export default async function Home() {
-  // Fetch up to 18 photos (3 full blocks of 6)
-  let photos = await getAllPhotos(18);
+  // Fetch homepage images
+  const photos = await getHomepageImages();
 
   // Fetch categories for the "Explore the work" section (thumbnails)
   const allCategories = await getPhotosForEachCategory(1);
@@ -24,34 +25,13 @@ export default async function Home() {
     .map((slug) => allCategories.find((c) => c.id === slug))
     .filter((c) => c !== undefined);
 
-  // Layout Logic:
-  // The grid pattern repeats every 6 items (forming a perfect rectangle).
-  // To avoid jagged edges or empty spaces, we trim the photos to the nearest multiple of 6.
-  if (photos && photos.length >= 6) {
-    const validCount = Math.floor(photos.length / 6) * 6;
-    photos = photos.slice(0, validCount);
-  }
-
-  const gridPhotos: PhotoItem[] = [];
-  const spans = [
-    "col-span-2 row-span-2", // Big Square (Left)
-    "col-span-2 row-span-1", // Wide (Right Top)
-    "col-span-1 row-span-1", // Small (Right Middle 1)
-    "col-span-1 row-span-1", // Small (Right Middle 2)
-    "col-span-2 row-span-1", // Wide (Bottom Left)
-    "col-span-2 row-span-1", // Wide (Bottom Right)
-  ];
-
-  if (photos && photos.length > 0) {
-    photos.forEach((photo: any, i: number) => {
-      gridPhotos.push({
-        src: photo.url,
-        className: spans[i % spans.length],
-        alt: "Portfolio Item",
-        type: "photo",
-      });
-    });
-  }
+  // Transform to PhotoItem for the grid
+  const gridPhotos: PhotoItem[] = photos.map((photo) => ({
+    src: photo.url,
+    alt: photo.alt_text || "Portfolio Item",
+    className: "aspect-square", // Force 1:1 aspect ratio
+    type: "photo",
+  }));
 
   // Fetch Testimonials
   const testimonials = await getTestimonials(3);

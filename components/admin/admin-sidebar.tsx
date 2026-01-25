@@ -29,6 +29,7 @@ export function AdminSidebar() {
     { href: "/admin/categories", label: "Categories", icon: FolderOpen },
     { href: "/admin/bookings", label: "Bookings", icon: Calendar },
     { href: "/admin/messages", label: "Messages", icon: MessageSquare },
+    { href: "/admin/homepage", label: "Homepage Grid", icon: ImageIcon },
     { href: "/admin/testimonials", label: "Testimonials", icon: Zap },
     { href: "/admin/settings", label: "Settings", icon: Settings },
   ];

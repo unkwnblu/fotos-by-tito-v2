@@ -97,7 +97,7 @@ export function PhotoGrid({ photos = defaultPhotos }: PhotoGridProps) {
 
   return (
     <motion.div
-      className="grid grid-cols-2 gap-2 md:gap-4 lg:grid-cols-4 auto-rows-[250px] mb-16 -mx-1 md:mx-0"
+      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-2 mb-16 mx-0"
       variants={staggerContainer}
       initial="hidden"
       whileInView="visible"
@@ -111,7 +111,7 @@ export function PhotoGrid({ photos = defaultPhotos }: PhotoGridProps) {
               variants={fadeInUp}
               className={cn(
                 "col-span-2 md:col-span-2 lg:col-span-4 row-span-1 flex flex-col items-center justify-center py-12 md:py-16 bg-muted/30 rounded-lg text-center px-4",
-                photo.className
+                photo.className,
               )}
             >
               <div className="w-16 h-px bg-primary/20 mb-6" />
@@ -135,7 +135,7 @@ export function PhotoGrid({ photos = defaultPhotos }: PhotoGridProps) {
             variants={scaleIn}
             className={cn(
               "relative overflow-hidden rounded-lg group bg-muted",
-              photo.className
+              photo.className,
             )}
           >
             {!loadedImages.has(idx) && (
@@ -148,7 +148,7 @@ export function PhotoGrid({ photos = defaultPhotos }: PhotoGridProps) {
                 fill
                 className={cn(
                   "object-cover transition-transform duration-300 group-hover:scale-105",
-                  !loadedImages.has(idx) ? "opacity-0" : "opacity-100"
+                  !loadedImages.has(idx) ? "opacity-0" : "opacity-100",
                 )}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 onLoad={() => handleImageLoad(idx)}

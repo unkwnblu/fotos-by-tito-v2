@@ -85,7 +85,7 @@ function CategorySection({ data }: { data: CategoryData }) {
               src={src}
               alt={`${data.title} ${index + 1}`}
               fill
-              className="object-cover transition-transform duration-500 hover:scale-105"
+              className="object-cover object-[center_18%] transition-transform duration-500 hover:scale-105"
             />
           </div>
         ))}
