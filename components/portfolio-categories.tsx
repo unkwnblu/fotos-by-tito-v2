@@ -77,9 +77,10 @@ function CategorySection({ data }: { data: CategoryData }) {
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {displayImages.map((src, index) => (
-          <div
+          <Link
             key={`${data.id}-${index}`}
-            className="relative h-[400px] min-w-[300px] md:min-w-[400px] flex-shrink-0 snap-start overflow-hidden rounded-2xl bg-muted"
+            href={`/portfolio/${data.id}`}
+            className="relative h-[400px] min-w-[300px] md:min-w-[400px] flex-shrink-0 snap-start overflow-hidden rounded-2xl bg-muted block"
           >
             <Image
               src={src}
@@ -87,7 +88,7 @@ function CategorySection({ data }: { data: CategoryData }) {
               fill
               className="object-cover object-[center_18%] transition-transform duration-500 hover:scale-105"
             />
-          </div>
+          </Link>
         ))}
       </div>
     </div>

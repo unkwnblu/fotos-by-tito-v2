@@ -31,9 +31,8 @@ export function About() {
             between poses, the joy that can’t be staged.
             <br />
             My sessions are relaxed, playful, and full of encouragement (yes,
-            you’ll hear “so beautiful” more than once (smiley emoji)). My goal
-            is simple: to create images that feel natural now and meaningful
-            years from now.
+            you’ll hear “so beautiful” more than once 😊). My goal is simple: to
+            create images that feel natural now and meaningful years from now.
             <br />
           </p>
         </motion.div>
@@ -57,7 +56,7 @@ export function About() {
                 fill
                 className={cn(
                   "object-cover transition-opacity duration-500",
-                  loadedSecondary ? "opacity-100" : "opacity-0"
+                  loadedSecondary ? "opacity-100" : "opacity-0",
                 )}
                 onLoad={() => setLoadedSecondary(true)}
               />

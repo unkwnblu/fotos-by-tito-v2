@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Lightbox } from "./lightbox";
 
 // Define the interface for a photo object
 export interface PhotoItem {
@@ -90,73 +91,107 @@ import { fadeInUp, scaleIn, staggerContainer } from "@/lib/animations";
 
 export function PhotoGrid({ photos = defaultPhotos }: PhotoGridProps) {
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentInfoIndex, setCurrentInfoIndex] = useState(0);
+
+  // Filter only photo items for the lightbox
+  const lightboxPhotos = photos.filter((p) => !p.type || p.type === "photo");
 
   const handleImageLoad = (idx: number) => {
     setLoadedImages((prev) => new Set(prev).add(idx));
   };
 
+  const openLightbox = (photoIndex: number) => {
+    // Find the index of this photo in the filtered lightboxPhotos array
+    // We need to map the original index to the lightbox index
+    // But simplest is to just pass the subset index if easy, or search.
+    // If we filter first, we lose the mapping from map((photo, idx)
+
+    // Better strategy: Count how many non-photo items appeared before this idx
+    const photoItem = photos[photoIndex];
+    if (photoItem.type === "cta") return;
+
+    const trueIndex = lightboxPhotos.indexOf(photoItem);
+    if (trueIndex >= 0) {
+      setCurrentInfoIndex(trueIndex);
+      setLightboxOpen(true);
+    }
+  };
+
   return (
-    <motion.div
-      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-2 mb-16 mx-0"
-      variants={staggerContainer}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: false, margin: "-100px" }}
-    >
-      {photos.map((photo, idx) => {
-        if (photo.type === "cta" && photo.ctaContent) {
+    <>
+      <motion.div
+        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-2 mb-16 mx-0"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, margin: "-100px" }}
+      >
+        {photos.map((photo, idx) => {
+          if (photo.type === "cta" && photo.ctaContent) {
+            return (
+              <motion.div
+                key={idx}
+                variants={fadeInUp}
+                className={cn(
+                  "col-span-2 md:col-span-2 lg:col-span-4 row-span-1 flex flex-col items-center justify-center py-12 md:py-16 bg-muted/30 rounded-lg text-center px-4",
+                  photo.className,
+                )}
+              >
+                <div className="w-16 h-px bg-primary/20 mb-6" />
+                <h3 className="text-xl md:text-2xl font-serif text-emerald-900 mb-6 font-medium">
+                  {photo.ctaContent.title}
+                </h3>
+                <a
+                  href={photo.ctaContent.href}
+                  className="inline-flex items-center justify-center px-6 py-2 text-sm font-bold uppercase tracking-widest text-white bg-[#2d5d4b] rounded-full hover:bg-[#1e3d32] transition-colors"
+                >
+                  {photo.ctaContent.buttonText}
+                </a>
+                <div className="w-16 h-px bg-primary/20 mt-6" />
+              </motion.div>
+            );
+          }
+
           return (
             <motion.div
               key={idx}
-              variants={fadeInUp}
+              variants={scaleIn}
               className={cn(
-                "col-span-2 md:col-span-2 lg:col-span-4 row-span-1 flex flex-col items-center justify-center py-12 md:py-16 bg-muted/30 rounded-lg text-center px-4",
+                "relative overflow-hidden rounded-lg group bg-muted cursor-zoom-in",
                 photo.className,
               )}
+              onClick={() => openLightbox(idx)}
             >
-              <div className="w-16 h-px bg-primary/20 mb-6" />
-              <h3 className="text-xl md:text-2xl font-serif text-emerald-900 mb-6 font-medium">
-                {photo.ctaContent.title}
-              </h3>
-              <a
-                href={photo.ctaContent.href}
-                className="inline-flex items-center justify-center px-6 py-2 text-sm font-bold uppercase tracking-widest text-white bg-[#2d5d4b] rounded-full hover:bg-[#1e3d32] transition-colors"
-              >
-                {photo.ctaContent.buttonText}
-              </a>
-              <div className="w-16 h-px bg-primary/20 mt-6" />
+              {!loadedImages.has(idx) && (
+                <Skeleton className="absolute inset-0 h-full w-full" />
+              )}
+              {photo.src && (
+                <Image
+                  src={photo.src}
+                  alt={photo.alt || ""}
+                  fill
+                  className={cn(
+                    "object-cover transition-transform duration-300 group-hover:scale-105",
+                    !loadedImages.has(idx) ? "opacity-0" : "opacity-100",
+                  )}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  onLoad={() => handleImageLoad(idx)}
+                />
+              )}
             </motion.div>
           );
-        }
-
-        return (
-          <motion.div
-            key={idx}
-            variants={scaleIn}
-            className={cn(
-              "relative overflow-hidden rounded-lg group bg-muted",
-              photo.className,
-            )}
-          >
-            {!loadedImages.has(idx) && (
-              <Skeleton className="absolute inset-0 h-full w-full" />
-            )}
-            {photo.src && (
-              <Image
-                src={photo.src}
-                alt={photo.alt || ""}
-                fill
-                className={cn(
-                  "object-cover transition-transform duration-300 group-hover:scale-105",
-                  !loadedImages.has(idx) ? "opacity-0" : "opacity-100",
-                )}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                onLoad={() => handleImageLoad(idx)}
-              />
-            )}
-          </motion.div>
-        );
-      })}
-    </motion.div>
+        })}
+      </motion.div>
+      <AnimatePresence>
+        {lightboxOpen && (
+          <Lightbox
+            images={lightboxPhotos}
+            initialIndex={currentInfoIndex}
+            onClose={() => setLightboxOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+    </>
   );
 }
