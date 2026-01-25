@@ -51,7 +51,7 @@ export function PortfolioNavbar({ user, role }: PortfolioNavbarProps) {
       <nav
         className={cn(
           "sticky top-0 z-50 flex items-center shadow-xl justify-between md:justify-center bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out",
-          scrolled ? "py-2" : "p-4 md:p-6"
+          scrolled ? "py-2" : "p-4 md:p-6",
         )}
       >
         <div className="md:hidden flex items-center">
@@ -63,7 +63,7 @@ export function PortfolioNavbar({ user, role }: PortfolioNavbarProps) {
               height={32}
               className={cn(
                 "transition-all duration-300",
-                scrolled ? "w-16" : "w-20"
+                scrolled ? "w-16" : "w-20",
               )}
             />
           </Link>
@@ -79,7 +79,7 @@ export function PortfolioNavbar({ user, role }: PortfolioNavbarProps) {
                 href={link.href}
                 className={cn(
                   "text-sm font-bold tracking-[0.2em] text-muted-foreground transition-colors hover:text-[#2d5d4b]",
-                  pathname === link.href && "text-foreground"
+                  pathname === link.href && "text-foreground",
                 )}
               >
                 {link.name}
@@ -96,7 +96,7 @@ export function PortfolioNavbar({ user, role }: PortfolioNavbarProps) {
               height={32}
               className={cn(
                 "h-auto transition-all duration-300 ease-in-out",
-                scrolled ? "w-24 md:w-28" : "w-32 md:w-40"
+                scrolled ? "w-24 md:w-28" : "w-32 md:w-40",
               )}
               priority
             />
@@ -110,7 +110,7 @@ export function PortfolioNavbar({ user, role }: PortfolioNavbarProps) {
                 href={link.href}
                 className={cn(
                   "text-sm font-bold tracking-[0.2em] text-muted-foreground transition-colors hover:text-[#2d5d4b]",
-                  pathname === link.href && "text-foreground"
+                  pathname === link.href && "text-foreground",
                 )}
               >
                 {link.name}
@@ -135,14 +135,7 @@ export function PortfolioNavbar({ user, role }: PortfolioNavbarProps) {
                   LOGOUT
                 </button>
               </>
-            ) : (
-              <Link
-                href="/login"
-                className="text-sm font-bold tracking-[0.2em] text-muted-foreground transition-colors hover:text-primary"
-              >
-                LOGIN
-              </Link>
-            )}
+            ) : null}
           </div>
         </div>
 
@@ -178,7 +171,7 @@ export function PortfolioNavbar({ user, role }: PortfolioNavbarProps) {
                     "text-3xl font-bold uppercase transition-colors hover:text-[#2d5d4b]",
                     pathname === link.href
                       ? "text-primary"
-                      : "text-muted-foreground"
+                      : "text-muted-foreground",
                   )}
                 >
                   {link.name}
@@ -205,15 +198,7 @@ export function PortfolioNavbar({ user, role }: PortfolioNavbarProps) {
                       Logout
                     </button>
                   </>
-                ) : (
-                  <Link
-                    href="/login"
-                    onClick={() => setIsOpen(false)}
-                    className="text-xl font-bold uppercase text-muted-foreground hover:text-primary"
-                  >
-                    Login
-                  </Link>
-                )}
+                ) : null}
               </div>
               <div className="flex items-center gap-4 pt-4">
                 <Link

@@ -24,7 +24,7 @@ export function PricingList({ offerings }: { offerings: PricingOffering[] }) {
   return (
     <div className="min-h-screen bg-background flex flex-col md:flex-row overflow-hidden relative">
       {/* Mobile Header (Visible only on small screens) */}
-      <div className="md:hidden pt-24 pb-8 px-6">
+      <div className="md:hidden pt-10 pb-8 px-6">
         <h1 className="text-4xl font-serif font-bold tracking-tighter text-foreground mb-2">
           Select Session
         </h1>
@@ -43,7 +43,7 @@ export function PricingList({ offerings }: { offerings: PricingOffering[] }) {
             onClick={() => setActiveId(isActive ? null : offering.id)}
             className={cn(
               "relative flex-1 md:h-screen min-h-[100px] md:min-h-0 flex flex-col justify-end overflow-hidden cursor-pointer group transition-all duration-700 ease-in-out border-b md:border-b-0 md:border-r border-border hover:flex-[1.5]",
-              isActive ? "flex-[5] md:flex-[2.5]" : "flex-[1]"
+              isActive ? "flex-[5] md:flex-[2.5]" : "flex-[1]",
             )}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -59,7 +59,7 @@ export function PricingList({ offerings }: { offerings: PricingOffering[] }) {
                   "object-cover transition-all duration-1000 ease-out",
                   isActive
                     ? "scale-105 opacity-40 md:opacity-100"
-                    : "scale-100 opacity-60 grayscale md:grayscale-[0.5] group-hover:grayscale-0"
+                    : "scale-100 opacity-60 grayscale md:grayscale-[0.5] group-hover:grayscale-0",
                 )}
               />
               <div
@@ -67,7 +67,7 @@ export function PricingList({ offerings }: { offerings: PricingOffering[] }) {
                   "absolute inset-0 transition-colors duration-500",
                   isActive
                     ? "bg-background/80 md:bg-black/40"
-                    : "bg-black/50 group-hover:bg-transparent"
+                    : "bg-black/50 group-hover:bg-transparent",
                 )}
               />
             </div>
@@ -96,7 +96,7 @@ export function PricingList({ offerings }: { offerings: PricingOffering[] }) {
                     <p
                       className={cn(
                         "text-xs font-bold tracking-[0.2em] uppercase md:text-white/80",
-                        isActive ? "text-primary/80" : "text-white/90"
+                        isActive ? "text-primary/80" : "text-white/90",
                       )}
                     >
                       {offering.subtitle}
@@ -104,7 +104,7 @@ export function PricingList({ offerings }: { offerings: PricingOffering[] }) {
                     <h2
                       className={cn(
                         "text-4xl md:text-6xl font-serif font-bold leading-none md:text-white",
-                        isActive ? "text-foreground" : "text-white"
+                        isActive ? "text-foreground" : "text-white",
                       )}
                     >
                       {offering.title}

@@ -64,7 +64,7 @@ export function Navbar({ user, role }: NavbarProps) {
                     "text-3xl font-bold uppercase transition-colors hover:text-[#2d5d4b]",
                     pathname === link.href
                       ? "text-primary"
-                      : "text-muted-foreground"
+                      : "text-muted-foreground",
                   )}
                 >
                   {link.name}
@@ -91,20 +91,12 @@ export function Navbar({ user, role }: NavbarProps) {
                       Sign Out
                     </button>
                   </>
-                ) : (
-                  <Link
-                    href="/login"
-                    onClick={toggleMenu}
-                    className="text-xl font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    Login
-                  </Link>
-                )}
+                ) : null}
               </div>
 
               <div className="flex items-center gap-4 pt-4">
                 <Link
-                  href="https://instagram.com"
+                  href="https://instagram.com/fotos_by_tito"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="rounded-full border border-gray-200 p-2 hover:bg-accent hover:text-accent-foreground"
@@ -122,9 +114,6 @@ export function Navbar({ user, role }: NavbarProps) {
       <nav className="relative z-10 hidden h-screen w-64 flex-col justify-between shadow-xl bg-background p-6 md:flex">
         {/* Top: Logo + Subtext */}
         <div className="flex flex-col items-center space-y-2 pt-4">
-          <p className="text-xs text-muted-foreground uppercase tracking-widest">
-            A VISUAL ODESSY
-          </p>
           <Image src={logo} alt="Logo" />
         </div>
 
@@ -138,7 +127,7 @@ export function Navbar({ user, role }: NavbarProps) {
                 "text-xl font-bold uppercase transition-colors hover:text-[#2d5d4b]",
                 pathname === link.href
                   ? "text-primary"
-                  : "text-muted-foreground"
+                  : "text-muted-foreground",
               )}
             >
               {link.name}
@@ -168,14 +157,7 @@ export function Navbar({ user, role }: NavbarProps) {
                   Sign Out
                 </button>
               </>
-            ) : (
-              <Link
-                href="/login"
-                className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
-              >
-                Login
-              </Link>
-            )}
+            ) : null}
           </div>
 
           {/* Controls: Theme Toggle (Left) + Instagram (Right) */}

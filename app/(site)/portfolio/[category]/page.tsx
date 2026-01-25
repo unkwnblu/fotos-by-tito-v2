@@ -2,6 +2,8 @@
 import { PhotoGrid, PhotoItem } from "@/components/photo-grid";
 import { PortfolioEndCap } from "@/components/portfolio-end-cap";
 import { getPhotosByCategory, getCategory } from "@/lib/photos";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 interface PageProps {
   params: Promise<{
@@ -61,6 +63,16 @@ export default async function CategoryPage({ params }: PageProps) {
 
   return (
     <div className="container mx-auto px-4 py-8 md:px-8">
+      <div className="mb-8">
+        <Link
+          href="/portfolio"
+          className="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Portfolio
+        </Link>
+      </div>
+
       <header className="mb-12 text-center">
         <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-[#2d5d4b] uppercase">
           {category.title}

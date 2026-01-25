@@ -60,6 +60,7 @@ const faqs = [
 
 export function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [showAll, setShowAll] = useState(false);
 
   const toggleFaq = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -112,6 +113,7 @@ export function Faq() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: (idx + 5) * 0.1 }}
+              className={cn(idx > 0 && !showAll && "hidden md:block")}
             >
               <FaqItem
                 faq={faq}
@@ -122,6 +124,19 @@ export function Faq() {
           ))}
         </div>
       </div>
+
+      {/* View More Button (Mobile Only) */}
+      {!showAll && (
+        <div className="mt-8 flex justify-center md:hidden">
+          <button
+            onClick={() => setShowAll(true)}
+            className="group flex items-center gap-2 rounded-full border border-gray-200 px-6 py-3 text-sm font-medium uppercase tracking-wide transition-colors hover:border-[#2d5d4b] hover:text-[#2d5d4b]"
+          >
+            View More Questions
+            <ChevronDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+          </button>
+        </div>
+      )}
     </section>
   );
 }
@@ -150,7 +165,7 @@ function FaqItem({
           <ChevronDown
             className={cn(
               "h-4 w-4 transition-transform duration-300",
-              isOpen && "rotate-180"
+              isOpen && "rotate-180",
             )}
           />
         </div>
