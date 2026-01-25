@@ -1,9 +1,9 @@
-// import { categories } from "@/lib/data"; // Removed
 import { PhotoGrid, PhotoItem } from "@/components/photo-grid";
 import { PortfolioEndCap } from "@/components/portfolio-end-cap";
 import { getPhotosByCategory, getCategory } from "@/lib/photos";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { categories as staticCategories } from "@/lib/data";
 
 interface PageProps {
   params: Promise<{
@@ -61,6 +61,12 @@ export default async function CategoryPage({ params }: PageProps) {
     });
   }
 
+  // Look up static description
+  const staticData = staticCategories.find((c) => c.id === categoryId);
+  const description =
+    staticData?.description ||
+    `Explore our collection of ${category.title.toLowerCase()}`;
+
   return (
     <div className="container mx-auto px-4 py-8 md:px-8">
       <div className="mb-8">
@@ -77,9 +83,7 @@ export default async function CategoryPage({ params }: PageProps) {
         <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-[#2d5d4b] uppercase">
           {category.title}
         </h1>
-        <p className="mt-4 text-muted-foreground">
-          Explore our collection of {category.title.toLowerCase()}
-        </p>
+        <p className="mt-4 text-muted-foreground">{description}</p>
       </header>
 
       {/* Photo Grid with Soft Breaks */}

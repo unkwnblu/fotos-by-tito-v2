@@ -11,6 +11,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { User } from "@supabase/supabase-js";
 import { signOut } from "@/app/actions/auth";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface NavbarProps {
   user: User | null;
@@ -35,7 +36,7 @@ export function Navbar({ user, role }: NavbarProps) {
   return (
     <>
       {/* Mobile Topbar */}
-      <nav className="sticky top-0 z-50 flex items-center justify-between shadow-xl bg-background p-4 md:hidden">
+      <nav className="sticky top-0 z-50 flex items-center justify-between shadow-xl bg-background dark:bg-zinc-900 p-4 md:hidden">
         <div className="flex items-center gap-2">
           <Image src={logo} alt="Logo" width={80} height={32} />
         </div>
@@ -95,6 +96,7 @@ export function Navbar({ user, role }: NavbarProps) {
               </div>
 
               <div className="flex items-center gap-4 pt-4">
+                <ThemeToggle />
                 <Link
                   href="https://instagram.com/fotos_by_tito"
                   target="_blank"
@@ -111,7 +113,7 @@ export function Navbar({ user, role }: NavbarProps) {
       </AnimatePresence>
 
       {/* Desktop Sidebar (Hidden on mobile) */}
-      <nav className="relative z-10 hidden h-screen w-64 flex-col justify-between shadow-xl bg-background p-6 md:flex">
+      <nav className="relative z-10 hidden h-screen w-64 flex-col justify-between shadow-xl bg-background dark:bg-zinc-900 p-6 md:flex">
         {/* Top: Logo + Subtext */}
         <div className="flex flex-col items-center space-y-2 pt-4">
           <Image src={logo} alt="Logo" />
@@ -162,6 +164,7 @@ export function Navbar({ user, role }: NavbarProps) {
 
           {/* Controls: Theme Toggle (Left) + Instagram (Right) */}
           <div className="flex items-center justify-between px-2">
+            <ThemeToggle />
             <Link
               href="https://instagram.com"
               target="_blank"

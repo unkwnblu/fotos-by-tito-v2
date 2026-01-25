@@ -8,6 +8,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 import { User } from "@supabase/supabase-js";
 import { signOut } from "@/app/actions/auth";
@@ -50,7 +51,7 @@ export function PortfolioNavbar({ user, role }: PortfolioNavbarProps) {
     <>
       <nav
         className={cn(
-          "sticky top-0 z-50 flex items-center shadow-xl justify-between md:justify-center bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out",
+          "sticky top-0 z-50 flex items-center shadow-xl justify-between md:justify-center bg-background/95 dark:bg-zinc-900/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:supports-[backdrop-filter]:bg-zinc-900/60 transition-all duration-300 ease-in-out",
           scrolled ? "py-2" : "p-4 md:p-6",
         )}
       >
@@ -136,6 +137,9 @@ export function PortfolioNavbar({ user, role }: PortfolioNavbarProps) {
                 </button>
               </>
             ) : null}
+            <div className="pl-4 border-l border-border/50 ml-4">
+              <ThemeToggle />
+            </div>
           </div>
         </div>
 
@@ -201,6 +205,7 @@ export function PortfolioNavbar({ user, role }: PortfolioNavbarProps) {
                 ) : null}
               </div>
               <div className="flex items-center gap-4 pt-4">
+                <ThemeToggle />
                 <Link
                   href="https://instagram.com"
                   target="_blank"

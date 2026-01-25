@@ -2,12 +2,15 @@ export interface CategoryData {
   id: string;
   title: string;
   images: string[];
+  description?: string;
 }
 
 export const categories: CategoryData[] = [
   {
     id: "portraits",
     title: "PORTRAITS & HEADSHOTS",
+    description:
+      "Portraits and headshots designed to reflect who you are — whether for professional use or personal milestones.",
     images: [
       "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=1000&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop",
@@ -34,6 +37,8 @@ export const categories: CategoryData[] = [
   {
     id: "newborns",
     title: "NEWBORNS",
+    description:
+      "Newborn photography focused on tiny details, gentle moments, and the love surrounding your baby’s earliest days.",
     images: [
       "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1000&auto=format&fit=crop",
@@ -60,6 +65,8 @@ export const categories: CategoryData[] = [
   {
     id: "maternity",
     title: "MATERNITY",
+    description:
+      "Celebrating the beauty of motherhood. Elegant and timeless images of this special journey.",
     images: [
       "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1000&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1000&auto=format&fit=crop",
@@ -86,6 +93,8 @@ export const categories: CategoryData[] = [
   {
     id: "family-milestones",
     title: "FAMILY & MILESTONES",
+    description:
+      "Timeless memories with those you love most. From birthdays to reunions, we capture the joy of being together.",
     images: [
       "https://images.unsplash.com/photo-1449824913929-49aa7649720b?q=80&w=1000&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=1000&auto=format&fit=crop",
@@ -112,6 +121,8 @@ export const categories: CategoryData[] = [
   {
     id: "christmas",
     title: "CHRISTMAS",
+    description:
+      "Magical holiday moments to cherish. Festive sessions that bring out the wonder of the season.",
     images: [
       "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop",
