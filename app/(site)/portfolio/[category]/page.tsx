@@ -29,35 +29,25 @@ export default async function CategoryPage({ params }: PageProps) {
 
   const photos = await getPhotosByCategory(categoryId);
 
-  // Transform simple image URLs into PhotoItems with random spans
+  // Transform simple image URLs into PhotoItems for the grid
   const gridPhotos: PhotoItem[] = [];
-  const spans = [
-    "col-span-1 lg:col-span-2 lg:row-span-2", // 0: Large
-    "col-span-1 lg:col-span-1 lg:row-span-1", // 1: Small
-    "col-span-2 lg:col-span-1 lg:row-span-1", // 2: Wide
-    "col-span-1 lg:col-span-1 lg:row-span-2", // 3: Tall
-    "col-span-1 lg:col-span-1 lg:row-span-1", // 4: Small
-    "col-span-2 lg:col-span-2 lg:row-span-1", // 5: Wide & Tall-ish
-  ];
 
   if (photos.length === 0) {
     // Fallback or Empty State
-    // If user wants NO UNSPLASH, we show empty state or just empty grid.
-    // Let's show empty message for now to be clear.
   } else {
     photos.forEach((photo: any, i: number) => {
       // Add the photo
       gridPhotos.push({
         src: photo.url,
         alt: `${category.title} photo ${i + 1}`,
-        className: spans[i % spans.length],
+        className: "aspect-square", // Force 1:1 aspect ratio
         type: "photo",
       });
 
       // Inject Soft Break every 12 images
       if ((i + 1) % 12 === 0) {
         gridPhotos.push({
-          className: "col-span-full",
+          className: "col-span-full aspect-auto py-12", // Let it take natural height
           type: "cta",
           ctaContent: {
             title: "Interested in a session like this?",
