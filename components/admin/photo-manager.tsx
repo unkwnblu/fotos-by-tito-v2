@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   Trash2,
@@ -12,9 +13,28 @@ import {
 } from "lucide-react";
 // import { categories } from "@/lib/data"; // Removed
 import { deletePhoto, deletePhotos } from "@/app/admin/actions";
+import { updatePhotoOrder } from "@/lib/photos";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Modal } from "@/components/ui/modal";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  rectSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { GripVertical } from "lucide-react";
 
 interface Photo {
   id: string;
@@ -29,7 +49,110 @@ interface PhotoManagerProps {
   groupedPhotos: Record<string, Photo[]>;
 }
 
+interface SortablePhotoProps {
+  photo: Photo;
+  isSelectionMode: boolean;
+  selectedIds: Set<string>;
+  toggleSelection: (id: string) => void;
+  promptSingleDelete: (photo: Photo) => void;
+  deletingId: string | null;
+}
+
+const SortablePhoto = ({
+  photo,
+  isSelectionMode,
+  selectedIds,
+  toggleSelection,
+  promptSingleDelete,
+  deletingId,
+}: SortablePhotoProps) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: photo.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 20 : 1,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`group relative aspect-square bg-muted rounded-lg overflow-hidden border shadow-sm cursor-pointer transition-all ${
+        isSelectionMode && selectedIds.has(photo.id)
+          ? "ring-2 ring-primary ring-offset-2"
+          : ""
+      } ${isDragging ? "shadow-xl ring-2 ring-primary" : ""}`}
+      onClick={() => {
+        if (isSelectionMode) toggleSelection(photo.id);
+      }}
+    >
+      <Image
+        src={photo.url}
+        alt="Portfolio item"
+        fill
+        className="object-cover transition-transform duration-300 group-hover:scale-105 pointer-events-none"
+      />
+
+      {/* Selection Overlay */}
+      {isSelectionMode && (
+        <div
+          className={`absolute top-2 left-2 z-10 rounded-sm bg-white/90 p-0.5 shadow-sm transition-colors ${
+            selectedIds.has(photo.id) ? "text-primary" : "text-muted-foreground"
+          }`}
+        >
+          {selectedIds.has(photo.id) ? (
+            <CheckSquare className="w-5 h-5 fill-current" />
+          ) : (
+            <Square className="w-5 h-5" />
+          )}
+        </div>
+      )}
+
+      {/* Hover Actions (Only if not in selection mode) */}
+      {!isSelectionMode && (
+        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+          {/* Drag Handle */}
+          <div
+            className="cursor-move bg-white/10 text-white p-2 rounded-full hover:bg-white/20 transition-colors touch-none"
+            {...attributes}
+            {...listeners}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <GripVertical className="h-5 w-5" />
+          </div>
+
+          <button
+            disabled={deletingId === photo.id}
+            onClick={(e) => {
+              e.stopPropagation();
+              promptSingleDelete(photo);
+            }}
+            className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors disabled:opacity-50"
+            title="Delete Photo"
+          >
+            {deletingId === photo.id ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <Trash2 className="w-5 h-5" />
+            )}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export function PhotoManager({ groupedPhotos, categories }: PhotoManagerProps) {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState(categories[0]?.id || "");
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
@@ -52,7 +175,54 @@ export function PhotoManager({ groupedPhotos, categories }: PhotoManagerProps) {
     onConfirm: () => {},
   });
 
-  const currentPhotos = groupedPhotos[activeTab] || [];
+  // Local state for photos to support optimistic reordering
+  const [photosMap, setPhotosMap] =
+    useState<Record<string, Photo[]>>(groupedPhotos);
+
+  // Sync prop changes to local state
+  useEffect(() => {
+    setPhotosMap(groupedPhotos);
+  }, [groupedPhotos]);
+
+  const currentPhotos = photosMap[activeTab] || [];
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (active.id !== over?.id) {
+      const oldIndex = currentPhotos.findIndex((p) => p.id === active.id);
+      const newIndex = currentPhotos.findIndex((p) => p.id === over?.id);
+
+      const newOrder = arrayMove(currentPhotos, oldIndex, newIndex);
+
+      // Update local state
+      setPhotosMap((prev) => ({
+        ...prev,
+        [activeTab]: newOrder,
+      }));
+
+      // Save to server
+      const updates = newOrder.map((p, index) => ({
+        id: p.id,
+        display_order: index,
+      }));
+
+      try {
+        await updatePhotoOrder(updates);
+        router.refresh();
+      } catch (error: any) {
+        console.error("Failed to reorder:", error);
+        toast.error(error.message || "Failed to save new order");
+      }
+    }
+  };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
 
   const toggleSelection = (id: string) => {
     const newSelected = new Set(selectedIds);
@@ -226,72 +396,30 @@ export function PhotoManager({ groupedPhotos, categories }: PhotoManagerProps) {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              <AnimatePresence>
-                {currentPhotos.map((photo) => (
-                  <motion.div
-                    key={photo.id}
-                    layout
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    onClick={() => {
-                      if (isSelectionMode) toggleSelection(photo.id);
-                    }}
-                    className={`group relative aspect-square bg-muted rounded-lg overflow-hidden border shadow-sm cursor-pointer transition-all ${
-                      isSelectionMode && selectedIds.has(photo.id)
-                        ? "ring-2 ring-primary ring-offset-2"
-                        : ""
-                    }`}
-                  >
-                    <Image
-                      src={photo.url}
-                      alt="Portfolio item"
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={currentPhotos.map((p) => p.id)}
+                strategy={rectSortingStrategy}
+              >
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                  {currentPhotos.map((photo) => (
+                    <SortablePhoto
+                      key={photo.id}
+                      photo={photo}
+                      isSelectionMode={isSelectionMode}
+                      selectedIds={selectedIds}
+                      toggleSelection={toggleSelection}
+                      promptSingleDelete={promptSingleDelete}
+                      deletingId={deletingId}
                     />
-
-                    {/* Selection Overlay */}
-                    {isSelectionMode && (
-                      <div
-                        className={`absolute top-2 left-2 z-10 rounded-sm bg-white/90 p-0.5 shadow-sm transition-colors ${
-                          selectedIds.has(photo.id)
-                            ? "text-primary"
-                            : "text-muted-foreground"
-                        }`}
-                      >
-                        {selectedIds.has(photo.id) ? (
-                          <CheckSquare className="w-5 h-5 fill-current" />
-                        ) : (
-                          <Square className="w-5 h-5" />
-                        )}
-                      </div>
-                    )}
-
-                    {/* Hover Actions (Only if not in selection mode) */}
-                    {!isSelectionMode && (
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                        <button
-                          disabled={deletingId === photo.id}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            promptSingleDelete(photo);
-                          }}
-                          className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors disabled:opacity-50"
-                          title="Delete Photo"
-                        >
-                          {deletingId === photo.id ? (
-                            <Loader2 className="w-5 h-5 animate-spin" />
-                          ) : (
-                            <Trash2 className="w-5 h-5" />
-                          )}
-                        </button>
-                      </div>
-                    )}
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
           )}
         </div>
       </div>

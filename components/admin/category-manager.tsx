@@ -1,21 +1,105 @@
 "use client";
 
-// Force rebuild
-
-import { useState } from "react";
-import { Plus, Trash2, Loader2, AlertCircle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Plus, Trash2, Loader2, GripVertical } from "lucide-react"; // Added GripVertical
 import { toast } from "sonner";
 import { createCategory, deleteCategory } from "@/app/admin/actions";
+import { updateCategoryOrder } from "@/lib/photos"; // Import update function
 import { Modal } from "@/components/ui/modal";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy, // Use vertical strategy
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface Category {
   id: string;
   title: string;
-  count?: number; // Optional photo count if we fetch it
+  count?: number;
 }
 
-export function CategoryManager({ categories }: { categories: Category[] }) {
+// Sortable Item Component
+interface SortableCategoryItemProps {
+  cat: Category;
+  onPromptDelete: (cat: Category) => void;
+}
+
+const SortableCategoryItem = ({
+  cat,
+  onPromptDelete,
+}: SortableCategoryItemProps) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: cat.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 2 : 1,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`p-4 flex items-center justify-between group bg-card border rounded-lg mb-2 ${
+        isDragging
+          ? "shadow-lg ring-2 ring-primary"
+          : "hover:border-primary/50 transition-colors"
+      }`}
+    >
+      <div className="flex items-center gap-3">
+        {/* Drag Handle */}
+        <div
+          {...attributes}
+          {...listeners}
+          className="cursor-move text-muted-foreground hover:text-foreground touch-none"
+        >
+          <GripVertical className="h-5 w-5" />
+        </div>
+        <div>
+          <p className="font-medium">{cat.title}</p>
+          <p className="text-xs text-muted-foreground font-mono">{cat.id}</p>
+        </div>
+      </div>
+      <button
+        onClick={() => onPromptDelete(cat)}
+        className="p-2 text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded-full transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+        title="Delete Category"
+        onPointerDown={(e) => e.stopPropagation()} // Prevent drag conflict
+      >
+        <Trash2 className="w-4 h-4" />
+      </button>
+    </div>
+  );
+};
+
+export function CategoryManager({
+  categories: initialCategories,
+}: {
+  categories: Category[];
+}) {
+  const router = useRouter();
+  const [categories, setCategories] = useState(initialCategories);
   const [isCreating, setIsCreating] = useState(false);
   const [newCategory, setNewCategory] = useState({ id: "", title: "" });
   const [modalConfig, setModalConfig] = useState<{
@@ -31,12 +115,49 @@ export function CategoryManager({ categories }: { categories: Category[] }) {
     onConfirm: () => {},
   });
 
+  // Sync props to state
+  useEffect(() => {
+    setCategories(initialCategories);
+  }, [initialCategories]);
+
+  // DnD Sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (active.id !== over?.id) {
+      const oldIndex = categories.findIndex((c) => c.id === active.id);
+      const newIndex = categories.findIndex((c) => c.id === over?.id);
+
+      const newOrder = arrayMove(categories, oldIndex, newIndex);
+      setCategories(newOrder);
+
+      const updates = newOrder.map((cat, index) => ({
+        id: cat.id,
+        display_order: index,
+      }));
+
+      try {
+        await updateCategoryOrder(updates);
+        router.refresh(); // Refresh to update server state
+      } catch (error: any) {
+        console.error("Failed to reorder categories:", error);
+        toast.error(error.message || "Failed to save category order");
+      }
+    }
+  };
+
   const handleCreate = async () => {
     if (!newCategory.title) {
       toast.error("Title is required");
       return;
     }
-    // Auto-generate ID if empty from title
     const idToUse =
       newCategory.id || newCategory.title.toLowerCase().replace(/\s+/g, "-");
 
@@ -58,7 +179,6 @@ export function CategoryManager({ categories }: { categories: Category[] }) {
 
   const handleDelete = async (id: string) => {
     setModalConfig({ ...modalConfig, isOpen: false });
-    // We can add a loading state for specific item if needed, but for now global toast is fine
     try {
       const res = await deleteCategory(id);
       if (res.success) {
@@ -83,37 +203,36 @@ export function CategoryManager({ categories }: { categories: Category[] }) {
 
   return (
     <div className="grid md:grid-cols-2 gap-8">
-      {/* List */}
+      {/* Sortable List */}
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">Existing Categories</h2>
-        <div className="bg-card border rounded-lg divide-y">
-          {categories.length === 0 ? (
-            <div className="p-8 text-center text-muted-foreground">
-              No categories found.
-            </div>
-          ) : (
-            categories.map((cat) => (
-              <div
-                key={cat.id}
-                className="p-4 flex items-center justify-between group"
-              >
-                <div>
-                  <p className="font-medium">{cat.title}</p>
-                  <p className="text-xs text-muted-foreground font-mono">
-                    {cat.id}
-                  </p>
-                </div>
-                <button
-                  onClick={() => promptDelete(cat)}
-                  className="p-2 text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded-full transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-                  title="Delete Category"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+
+        {categories.length === 0 ? (
+          <div className="bg-card border rounded-lg p-8 text-center text-muted-foreground">
+            No categories found.
+          </div>
+        ) : (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={categories.map((c) => c.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div>
+                {categories.map((cat) => (
+                  <SortableCategoryItem
+                    key={cat.id}
+                    cat={cat}
+                    onPromptDelete={promptDelete}
+                  />
+                ))}
               </div>
-            ))
-          )}
-        </div>
+            </SortableContext>
+          </DndContext>
+        )}
       </div>
 
       {/* Create Form */}
@@ -128,7 +247,6 @@ export function CategoryManager({ categories }: { categories: Category[] }) {
                 value={newCategory.title}
                 onChange={(e) => {
                   const title = e.target.value;
-                  // Auto-slugify
                   const slug = title
                     .toLowerCase()
                     .replace(/[^a-z0-9]+/g, "-")

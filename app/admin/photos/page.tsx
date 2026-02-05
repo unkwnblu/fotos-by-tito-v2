@@ -8,6 +8,7 @@ async function getAllAdminPhotos() {
   const { data, error } = await supabase
     .from("photos")
     .select("*")
+    .order("display_order", { ascending: true })
     .order("created_at", { ascending: false });
 
   const { data: categories, error: catError } = await supabase

@@ -26,7 +26,15 @@ export function PortfolioNavbar({ user, role }: PortfolioNavbarProps) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      // Add hysteresis to prevent flickering near the threshold
+      // Only collapse when scrolled down significantly (> 50px)
+      // Only expand when scrolling back up near the top (< 20px)
+      // The gap (20-50px) serves as a buffer
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else if (window.scrollY < 20) {
+        setScrolled(false);
+      }
     };
 
     window.addEventListener("scroll", handleScroll);

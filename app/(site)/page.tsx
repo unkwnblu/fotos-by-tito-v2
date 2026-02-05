@@ -20,7 +20,7 @@ export default async function Home() {
   const allCategories = await getPhotosForEachCategory(1);
 
   // Filter and Sort: Portraits, Family, Newborns (Top 3)
-  const featuredSlugs = ["portraits", "family-milestones", "newborns"];
+  const featuredSlugs = ["portraits", "family-milestones", "kids"];
   const categories = featuredSlugs
     .map((slug) => allCategories.find((c) => c.id === slug))
     .filter((c) => c !== undefined);

@@ -6,6 +6,7 @@ async function getCategories() {
   const { data, error } = await supabase
     .from("categories")
     .select("*")
+    .order("display_order", { ascending: true })
     .order("created_at", { ascending: true });
 
   if (error) {

@@ -93,7 +93,7 @@ export async function deletePhoto(id: string, storagePath: string) {
 }
 
 export async function deletePhotos(
-  items: { id: string; storagePath: string }[]
+  items: { id: string; storagePath: string }[],
 ) {
   const supabase = await createClient();
 
@@ -224,4 +224,51 @@ export async function deleteCategory(id: string) {
   revalidatePath("/portfolio");
 
   return { success: true, message: "Category deleted successfully" };
+}
+
+export async function reorderPhotos(
+  updates: { id: string; display_order: number }[],
+) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  // We can't update all in one go easily with standard Supabase client without internal postgres function
+  // So we'll upsert. Upsert requires all columns usually, but if we only match on ID?
+  // Actually, upsert works well if we provide the PK.
+
+  // However, we want to initiate a batch update.
+  // RPC is best, but we might not have one.
+  // Loop is slow but works for small batches ( < 50 items).
+
+  try {
+    // We cannot use upsert because it tries to INSERT first, and we don't have all required fields (like url).
+    // Failing NOT NULL constraint.
+    // Instead we run parallel updates.
+
+    const promises = updates.map((u) =>
+      supabase
+        .from("photos")
+        .update({ display_order: u.display_order })
+        .eq("id", u.id),
+    );
+
+    await Promise.all(promises);
+
+    // Revalidate everything to ensure frontend updates
+    revalidatePath("/", "layout");
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error reordering photos:", error);
+    return {
+      success: false,
+      error: error.message || "Failed to reorder photos",
+    };
+  }
 }
