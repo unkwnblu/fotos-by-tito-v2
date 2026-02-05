@@ -10,7 +10,7 @@ export type ContactState = {
 
 export async function submitContactForm(
   prevState: ContactState,
-  formData: FormData
+  formData: FormData,
 ): Promise<ContactState> {
   const supabase = await createClient();
 

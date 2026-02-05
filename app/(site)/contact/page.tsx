@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useState } from "react";
 import Image from "next/image";
-import { Send, Loader2, CheckCircle } from "lucide-react";
+import { Send, Loader2, CheckCircle, Phone, Mail } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { cn } from "@/lib/utils";
 import { ScrollReveal } from "@/components/scroll-reveal";
@@ -63,6 +63,54 @@ export default function ContactPage() {
               direction="left"
               className="flex flex-col justify-center py-8"
             >
+              <div className="mb-12">
+                <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6 text-foreground">
+                  Get in Touch
+                </h2>
+                <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
+                  I'd love to hear from you. Whether you have a question about a
+                  shoot, pricing, or just want to say hi, feel free to drop me a
+                  line.
+                </p>
+
+                <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-12 border-b border-border/50 pb-12">
+                  <div>
+                    <h3 className="text-xs font-bold uppercase tracking-widest text-[#2d5d4b] mb-2">
+                      Photographer
+                    </h3>
+                    <p className="text-xl font-serif font-medium">
+                      Praise Ogunnowo
+                    </p>
+                  </div>
+
+                  <div className="space-y-4 md:text-right">
+                    <a
+                      href="tel:+31684685261"
+                      className="flex items-center md:justify-end gap-3 text-muted-foreground hover:text-[#2d5d4b] transition-colors group"
+                    >
+                      <span className="font-medium order-2 md:order-1">
+                        +31 (0) 6 8468 5261
+                      </span>
+                      <div className="w-10 h-10 rounded-full bg-muted/30 flex items-center justify-center group-hover:bg-[#2d5d4b]/10 transition-colors order-1 md:order-2">
+                        <Phone className="w-4 h-4" />
+                      </div>
+                    </a>
+
+                    <a
+                      href="mailto:fotosbytito@gmail.com"
+                      className="flex items-center md:justify-end gap-3 text-muted-foreground hover:text-[#2d5d4b] transition-colors group"
+                    >
+                      <span className="font-medium order-2 md:order-1">
+                        fotosbytito@gmail.com
+                      </span>
+                      <div className="w-10 h-10 rounded-full bg-muted/30 flex items-center justify-center group-hover:bg-[#2d5d4b]/10 transition-colors order-1 md:order-2">
+                        <Mail className="w-4 h-4" />
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
               {state.success ? (
                 <div className="flex flex-col items-center justify-center text-center space-y-6 p-12 border rounded-xl bg-muted/20">
                   <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400">

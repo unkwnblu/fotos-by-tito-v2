@@ -99,6 +99,7 @@ export function Footer() {
                 </Link>
               ))}
             </div>
+            <p>KYK: 99353350</p>
           </div>
 
           {/* Final CTA */}
