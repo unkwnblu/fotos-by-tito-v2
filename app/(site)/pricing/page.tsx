@@ -35,7 +35,7 @@ export default async function PricingPage() {
       ],
       image: getImage(
         "family-milestones",
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop"
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop",
       ),
       link: "/pricing/family-maternity",
     },
@@ -54,7 +54,7 @@ export default async function PricingPage() {
       ],
       image: getImage(
         "newborns",
-        "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop"
+        "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop",
       ),
       link: "/pricing/newborn",
     },
@@ -73,7 +73,7 @@ export default async function PricingPage() {
       ],
       image: getImage(
         "portraits",
-        "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop"
+        "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop",
       ),
       link: "/pricing/portraits-headshots",
     },

@@ -75,9 +75,6 @@ export function Faq() {
         transition={{ duration: 0.6 }}
         className="mb-2 border-gray-200 py-8"
       >
-        <p className="text-sm font-medium tracking-widest text-muted-foreground uppercase mb-2">
-          FAQ'S
-        </p>
         <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-[#2d5d4b] uppercase">
           Frequently Asked Questions
         </h2>

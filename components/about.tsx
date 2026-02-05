@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import abtImg from "@/public/abt-img.jpeg";
 
 export function About() {
   const [loadedSecondary, setLoadedSecondary] = useState(false);
@@ -51,7 +52,7 @@ export function About() {
                 <Skeleton className="absolute inset-0 h-full w-full" />
               )}
               <Image
-                src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&q=80&w=800"
+                src={abtImg}
                 alt="Photographer Portrait"
                 fill
                 className={cn(

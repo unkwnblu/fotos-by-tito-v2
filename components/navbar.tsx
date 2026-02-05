@@ -166,7 +166,7 @@ export function Navbar({ user, role }: NavbarProps) {
           <div className="flex items-center justify-between px-2">
             <ThemeToggle />
             <Link
-              href="https://instagram.com"
+              href="https://instagram.com/fotos_by_tito"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-full border border-gray-200 p-2 hover:bg-accent hover:text-accent-foreground"
