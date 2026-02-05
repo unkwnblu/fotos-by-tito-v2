@@ -14,9 +14,25 @@ const nunito = Nunito({
 
 export const metadata: Metadata = {
   title: "FotosByTito",
-  description: "A Visual Odyssey",
+  description: "Real moments, Beautifully preserved.",
   icons: {
     icon: "/logo.svg",
+  },
+  openGraph: {
+    title: "FotosByTito",
+    description: "Real moments, Beautifully preserved.",
+    url: "https://fotosbytito.nl",
+    siteName: "FotosByTito",
+    images: [
+      {
+        url: "/logo.svg",
+        width: 1200,
+        height: 630,
+        alt: "FotosByTito Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
   },
 };
 
