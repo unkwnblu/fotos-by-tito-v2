@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "FotosByTito",
   description: "Real moments, Beautifully preserved.",
   icons: {
-    icon: "/logo.svg",
+    icon: "/logo.jpeg",
   },
   openGraph: {
     title: "FotosByTito",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     siteName: "FotosByTito",
     images: [
       {
-        url: "/logo.svg",
+        url: "/logo.jpeg",
         width: 1200,
         height: 630,
         alt: "FotosByTito Logo",
