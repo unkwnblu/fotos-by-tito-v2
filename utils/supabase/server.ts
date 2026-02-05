@@ -1,6 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { getCookieOptions } from "./config";
 
 export async function createClient() {
   const cookieStore = await cookies();
@@ -18,7 +17,10 @@ export async function createClient() {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, {
                 ...options,
-                ...getCookieOptions(), // Merge with shared domain options
+                domain:
+                  process.env.NODE_ENV === "production"
+                    ? ".fotosbytito.nl"
+                    : undefined,
               }),
             );
           } catch {

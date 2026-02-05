@@ -76,7 +76,11 @@ export function Navbar({ user, role }: NavbarProps) {
                   <>
                     {role === "admin" && (
                       <Link
-                        href="/admin"
+                        href={
+                          process.env.NODE_ENV === "development"
+                            ? "http://dashboard.localhost:3000"
+                            : "https://dashboard.fotosbytito.nl"
+                        }
                         onClick={toggleMenu}
                         className="text-xl font-bold uppercase tracking-widest text-primary hover:text-primary/80 transition-colors"
                       >
@@ -144,7 +148,11 @@ export function Navbar({ user, role }: NavbarProps) {
               <>
                 {role === "admin" && (
                   <Link
-                    href="/admin"
+                    href={
+                      process.env.NODE_ENV === "development"
+                        ? "http://dashboard.localhost:3000"
+                        : "https://dashboard.fotosbytito.nl"
+                    }
                     className="text-xs font-bold uppercase tracking-widest text-primary hover:text-primary/80 transition-colors"
                   >
                     Dashboard

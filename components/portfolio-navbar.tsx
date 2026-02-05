@@ -121,7 +121,11 @@ export function PortfolioNavbar({ user, role }: PortfolioNavbarProps) {
               <>
                 {role === "admin" && (
                   <Link
-                    href="/admin"
+                    href={
+                      process.env.NODE_ENV === "development"
+                        ? "http://dashboard.localhost:3000"
+                        : "https://dashboard.fotosbytito.nl"
+                    }
                     className="text-sm font-bold tracking-[0.2em] text-primary transition-colors hover:text-primary/80"
                   >
                     DASHBOARD
@@ -186,7 +190,11 @@ export function PortfolioNavbar({ user, role }: PortfolioNavbarProps) {
                   <>
                     {role === "admin" && (
                       <Link
-                        href="/admin"
+                        href={
+                          process.env.NODE_ENV === "development"
+                            ? "http://dashboard.localhost:3000"
+                            : "https://dashboard.fotosbytito.nl"
+                        }
                         onClick={() => setIsOpen(false)}
                         className="text-xl font-bold uppercase text-primary hover:text-primary/80"
                       >

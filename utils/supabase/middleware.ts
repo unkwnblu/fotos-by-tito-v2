@@ -1,6 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { getCookieOptions } from "./config";
 
 export async function updateSession(
   request: NextRequest,
@@ -66,7 +65,10 @@ export async function updateSession(
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, {
               ...options,
-              ...getCookieOptions(), // Merge with shared domain options
+              domain:
+                process.env.NODE_ENV === "production"
+                  ? ".fotosbytito.nl"
+                  : undefined,
             }),
           );
         },
