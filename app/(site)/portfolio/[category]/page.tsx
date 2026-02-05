@@ -11,6 +11,32 @@ interface PageProps {
   }>;
 }
 
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const categoryId = resolvedParams.category;
+  const category = await getCategory(categoryId);
+
+  if (!category) {
+    return {
+      title: "Category Not Found",
+    };
+  }
+
+  return {
+    title: `${category.title} | FotosByTito`,
+    description: `Explore our ${category.title} photography portfolio.`,
+    openGraph: {
+      title: `${category.title} | FotosByTito`,
+      description: `Explore our ${category.title} photography portfolio.`,
+      url: `https://fotosbytito.nl/portfolio/${category.id}`,
+    },
+  };
+}
+
 export default async function CategoryPage({ params }: PageProps) {
   const resolvedParams = await params;
   const categoryId = resolvedParams.category;

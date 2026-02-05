@@ -13,6 +13,7 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://fotosbytito.nl"),
   title: "FotosByTito",
   description: "Real moments, Beautifully preserved.",
   icons: {
