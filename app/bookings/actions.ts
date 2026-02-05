@@ -11,7 +11,7 @@ export type BookingState = {
 
 export async function createBooking(
   prevState: BookingState,
-  formData: FormData
+  formData: FormData,
 ): Promise<BookingState> {
   const supabase = await createClient();
 
@@ -45,6 +45,33 @@ export async function createBooking(
     }
 
     revalidatePath("/admin/bookings");
+
+    // Send Email via Resend
+    try {
+      const { Resend } = await import("resend");
+      const resend = new Resend(process.env.RESEND_API_KEY);
+
+      await resend.emails.send({
+        from: "FotosByTito Admin <onboarding@resend.dev>",
+        to: "fotosbytito@gmail.com",
+        subject: `New Booking Request: ${package_name}`,
+        html: `
+          <h1>New Booking Request</h1>
+          <p><strong>Package:</strong> ${package_name} (${category_title})</p>
+          <p><strong>Price:</strong> ${package_price}</p>
+          <hr />
+          <p><strong>Client Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phone || "N/A"}</p>
+          <p><strong>Message:</strong></p>
+          <p>${message || "No message provided."}</p>
+        `,
+      });
+    } catch (emailError) {
+      console.error("Resend Booking Notification Error:", emailError);
+      // Don't fail the booking if email fails
+    }
+
     return { success: true, message: "Booking request sent successfully!" };
   } catch (error) {
     console.error("Booking error:", error);

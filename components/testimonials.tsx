@@ -44,7 +44,7 @@ export function Testimonials({
           viewport={{ once: true }}
           className="text-3xl md:text-5xl font-bold mb-16 text-center text-[#2d5d4b] uppercase"
         >
-          Stories & Reviews
+          Kind Words from Clients
         </motion.h2>
 
         <motion.div
