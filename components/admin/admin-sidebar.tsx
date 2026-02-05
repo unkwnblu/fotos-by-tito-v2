@@ -24,14 +24,14 @@ export function AdminSidebar() {
   };
 
   const links = [
-    { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/admin/photos", label: "Photos", icon: ImageIcon },
-    { href: "/admin/categories", label: "Categories", icon: FolderOpen },
-    { href: "/admin/bookings", label: "Bookings", icon: Calendar },
-    { href: "/admin/messages", label: "Messages", icon: MessageSquare },
-    { href: "/admin/homepage", label: "Homepage Grid", icon: ImageIcon },
-    { href: "/admin/testimonials", label: "Testimonials", icon: Zap },
-    { href: "/admin/settings", label: "Settings", icon: Settings },
+    { href: "/", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/photos", label: "Photos", icon: ImageIcon },
+    { href: "/categories", label: "Categories", icon: FolderOpen },
+    { href: "/bookings", label: "Bookings", icon: Calendar },
+    { href: "/messages", label: "Messages", icon: MessageSquare },
+    { href: "/homepage", label: "Homepage Grid", icon: ImageIcon },
+    { href: "/testimonials", label: "Testimonials", icon: Zap },
+    { href: "/settings", label: "Settings", icon: Settings },
   ];
 
   return (
