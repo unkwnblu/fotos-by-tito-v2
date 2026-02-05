@@ -3,4 +3,5 @@ export interface HomepageImage {
   url: string;
   created_at: string;
   alt_text?: string;
+  display_order: number;
 }
