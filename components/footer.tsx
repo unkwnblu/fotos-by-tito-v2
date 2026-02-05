@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Instagram, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -64,12 +65,38 @@ export function Footer() {
               <ArrowRight className="w-4 h-4 opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all" />
             </a>
             <div className="grid grid-cols-3 gap-2 mt-2 max-w-[200px]">
-              {/* Placeholders for IG Feed */}
-              {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="aspect-square bg-white/10 backdrop-blur-sm rounded-md border border-white/5"
-                ></div>
+              {/* Instagram Feed Images */}
+              {[
+                {
+                  id: 1,
+                  src: "/sc-1.png",
+                  link: "https://www.instagram.com/p/DSufiUCjFZ-/?igsh=MTI4b204cTFnbTQyYw==",
+                },
+                {
+                  id: 2,
+                  src: "/sc-3.png",
+                  link: "https://www.instagram.com/p/DUP8vrTjJio/?igsh=MXFxbzFtN3Z3MzVuNg==",
+                },
+                {
+                  id: 3,
+                  src: "/sc-2.png",
+                  link: "https://www.instagram.com/p/DQNIncjDCIJ/?igsh=MWowcDdocTA1Nm8xdA==",
+                },
+              ].map((item) => (
+                <Link
+                  key={item.id}
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="aspect-square relative overflow-hidden rounded-md border border-white/5 block group/image"
+                >
+                  <Image
+                    src={item.src}
+                    alt={`Instagram post ${item.id}`}
+                    fill
+                    className="object-cover hover:scale-110 transition-transform duration-300"
+                  />
+                </Link>
               ))}
             </div>
           </div>
