@@ -7,7 +7,7 @@ export const revalidate = 600; // Revalidate every 10 minutes
 
 export async function generateStaticParams() {
   return [
-    { category: "family-maternity" },
+    { category: "family-milestones" },
     { category: "newborn" },
     { category: "portraits-headshots" },
   ];
@@ -36,7 +36,7 @@ export default async function PricingCategoryPage({ params }: PageProps) {
 
   // Map URL category slug to Database category ID
   let dbCategoryId = "";
-  if (category === "family-maternity") dbCategoryId = "family-milestones";
+  if (category === "family-milestones") dbCategoryId = "family-milestones";
   if (category === "newborn") dbCategoryId = "newborns";
   if (category === "portraits-headshots") dbCategoryId = "portraits";
 
