@@ -40,6 +40,30 @@ export async function submitContactForm(
       return { error: "Failed to send message. Please try again." };
     }
 
+    // Send Email via Resend
+    try {
+      const { Resend } = await import("resend");
+      const resend = new Resend(process.env.RESEND_API_KEY);
+
+      await resend.emails.send({
+        from: "FotosByTito Admin <onboarding@resend.dev>",
+        to: "fotosbytito@gmail.com",
+        subject: "New Notification from Site",
+        html: `
+          <h1>New Message from ${first_name} ${last_name}</h1>
+          <p><strong>Subject:</strong> ${subject}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phone || "N/A"}</p>
+          <hr />
+          <p><strong>Message:</strong></p>
+          <p>${message}</p>
+        `,
+      });
+    } catch (emailError) {
+      console.error("Resend Error:", emailError);
+      // We don't fail the request if email fails, as DB save was successful
+    }
+
     return {
       success: true,
       message: "Message sent! I'll get back to you soon.",
