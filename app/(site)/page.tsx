@@ -52,10 +52,10 @@ export default async function Home() {
       <ScrollReveal delay={0.2}>
         <div className="flex justify-center -mt-4 mb-16">
           <Link
-            href="/portfolio"
+            href="/pricing"
             className="bg-[#2d5d4b] text-white px-8 py-3 rounded-md font-bold uppercase tracking-widest hover:bg-[#1e3d32] transition-colors"
           >
-            Explore Portfolio
+            Book a Session
           </Link>
         </div>
       </ScrollReveal>
